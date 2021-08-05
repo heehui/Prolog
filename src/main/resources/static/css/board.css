@@ -1,0 +1,106 @@
+@charset "UTF-8";
+
+@font-face {
+    font-family: 'Cafe24SsurroundAir';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24SsurroundAir.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'GongGothicBold';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicBold.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.container .row {
+	font-family: 'Cafe24SsurroundAir';
+    padding: 100px;
+    text-align:center; 
+}
+
+.container a{
+	font-family: 'GongGothicBold';
+	color: #0A91AB;
+    text-decoration: none;
+    background-color: transparent;
+    font-size:40px;
+}
+
+#total_btn button {
+	font-family: 'Cafe24SsurroundAir';
+	width:100px;
+	height:100px; 
+	margin:8px; 
+	margin-top:50px;
+	border: 1px solid #0A91AB;
+	background-color: rgba(0, 0, 0, 0);
+	color: white;
+	background-color:#0A91AB;
+	padding: 5px;
+	text-align: center;
+	font-size: 16px;
+	border-radius: 10px 20px 30px 40px;
+
+}
+
+#menu a {
+	font-size:20px;
+}
+
+#total_btn button:hover {
+	color:white;
+	background-color:#FEC045; 
+	border: 1px solid #FEC045;
+}
+
+hr {
+	border: 1px solid gray;
+	width: 100%;
+}
+
+th, td {
+	padding: 15px;
+}
+
+table {
+	border-spacing: 10px;
+}
+
+.image1 div:hover {
+	background: #e2e2e2;
+	color: #e2e2e2;
+}
+
+.imageblock {
+	max-width: 80%;
+	height: auto;
+	border: 1px solid #f0ffff;
+	padding: 0px;
+}
+
+#grid {
+	display: grid;
+	grid-template-rows: 1fr 1fr 1fr;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-gap: 2vw;
+}
+
+#grid>div {
+	font-size: 1vw;
+	padding: .5em;
+	background: white;
+	text-align: center;
+}
+
+.image1 {
+	max-width: 100%;
+	height: auto;
+	border: 1px solid gray;
+	padding: 0px;
+}
+
+#date1 {
+	color: #b2b2b2;
+}

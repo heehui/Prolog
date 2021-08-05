@@ -1,0 +1,49 @@
+@charset "UTF-8";
+
+	@font-face {
+    font-family: 'Cafe24SsurroundAir';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24SsurroundAir.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+	font-family: 'Cafe24SsurroundAir'; 
+	margin: auto;
+}
+
+ul{
+	list-style-type: none;
+}
+
+.list{
+	float:left;
+	list-style: none;
+	margin-left: 0; 
+}
+
+.list li a{
+	text-decoration-line: none; 
+}
+
+.mainbox p{
+	text-align:center;
+}
+
+.box1{
+	width:200px; 
+	height:200px;
+	border:1px solid; 
+	margin-top:40px; 
+	margin-left:300px;
+}
+
+.box2{
+	width:200px; 
+	height:200px;
+	border:1px solid; 
+	margin-top:40px; 
+	margin-left:300px;
+}
+ 
+

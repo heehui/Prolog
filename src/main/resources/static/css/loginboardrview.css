@@ -1,0 +1,85 @@
+@charset "UTF-8";
+
+@font-face {
+    font-family: 'Cafe24SsurroundAir';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24SsurroundAir.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body{
+	font-family: 'Cafe24SsurroundAir';
+	margin: 0 auto;
+}
+
+#container{
+	margin: 0 auto;
+	position:relative;
+	border: 1px dotted;
+	margin-top:100px;
+	width:800px;
+	height:600px;
+	text-align:center;
+	background-color:#ecffff;
+}
+
+.second_container{
+	width:780px;
+}
+
+.jumbotron-text{	
+	position:absolute;
+	font-size: 15px;
+	width:250px;
+	color:#0A91AB;
+	margin-left:570px;
+	margin-top:13px;
+}
+
+.lang{
+	position:absolute;
+	text-align:left; 
+	font-size: 25px; 
+	margin-top:-40px;
+}
+
+.lang_two{
+	position:absolute;
+	text-align:right;
+	margin-top:530px;
+	margin-left:600px;
+	font-size: 13px;
+	color:#c0c0c0; 
+}
+
+.main_title{
+	font-size: 25px; 
+	margin-top:80px;
+}
+
+.main_title img{
+	background-color:#ffffff;
+}
+
+#container2{
+	position:relative;
+	margin: 0 auto;
+}
+
+.main_textarea{
+	position:absolute;
+}
+
+.textarea{
+	float:left;
+	font-size:25px;
+	margin-top:60px;
+	margin-bottom:-20px;
+}
+
+
+
+
+
+
+

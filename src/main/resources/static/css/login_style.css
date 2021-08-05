@@ -1,0 +1,35 @@
+@charset "UTF-8";
+
+@font-face {
+	font-family: 'Cafe24SsurroundAir';
+	src:
+		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24SsurroundAir.woff')
+		format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
+body {
+	font-family: 'Cafe24SsurroundAir';
+	margin: auto;
+	text-align: center;
+}
+
+h2 {
+	font-size: 40px;
+}
+
+table {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.container {
+	margin-top: 100px;
+	width: 600px;
+	height: 500px;
+}
+
+#row {
+	font-size: 14px;
+}

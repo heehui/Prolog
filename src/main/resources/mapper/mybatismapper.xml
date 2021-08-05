@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cos.prologstart.dao.BoardDAO">
+    <insert id="addBoard" useGeneratedKeys="true" keyProperty="num">
+		INSERT INTO 
+	    	boardTable2
+	   			(
+	   				user_id,
+	   				lang,
+					title,
+					contents,
+					image
+				)
+	    	VALUES
+	   			(
+	   				#{user_id},
+	   				#{lang},
+	   				#{title},
+	   				#{contents},
+	   				#{image}
+	   				
+				)
+    </insert>
+	<select id="getAllBoard" resultType="com.cos.prologstart.vo.BoardVO">
+		SELECT
+			user_id, num, lang, title, contents, image, DATE_FORMAT(date1, '%Y-%m-%d %T') as 'date1'
+
+		FROM
+			boardTable2
+		ORDER BY num desc
+	</select>
+	
+	
+	<select id="getMenu" resultType="com.cos.prologstart.vo.BoardVO">
+		SELECT
+			 user_id, num, lang, title, contents, image, DATE_FORMAT(date1, '%Y-%m-%d %T') as 'date1'
+		FROM
+			boardTable2
+		WHERE
+			lang = #{lang}
+	</select>
+	
+	
+	 <select id="getBoardOne" resultType="com.cos.prologstart.vo.BoardVO">
+		SELECT
+			num, lang, title, contents, image, DATE_FORMAT(date1, '%Y-%m-%d %T') as 'date1'
+		FROM
+			boardTable2
+		WHERE
+			num = #{num}
+	</select>
+	
+	<update id="updateclear" parameterType="com.cos.prologstart.vo.BoardVO">
+		UPDATE boardTable2
+        SET 
+        	lang = #{lang},
+        	title = #{title},
+        	image = #{image},
+            contents = #{contents},
+            date1 = NOW()
+            
+        WHERE num = #{num}
+
+	</update>
+	
+	<delete id="deleteBoard" parameterType="com.cos.prologstart.vo.BoardVO">
+		DELETE 
+		FROM boardTable2
+        WHERE num = #{num}
+	</delete>
+	
+	<select id="goMypage" resultType="com.cos.prologstart.vo.BoardVO">
+		SELECT
+			user_id, num, lang, title, contents, image, DATE_FORMAT(date1, '%Y-%m-%d %T') as 'date1'
+		FROM
+			boardTable2
+		WHERE
+			user_id = #{user_id}
+	</select>
+	
+	<select id="readReply" resultType="com.cos.prologstart.vo.ReplyVO">
+		select 
+			reply_num,
+			content,
+			writer,
+			DATE_FORMAT(regDate, '%Y-%m-%d %T') as 'regDate'
+		from replyTable   
+		where num = #{num}
+		
+	</select>
+	
+	<insert id="writeReply">
+		insert into 
+		replyTable(num,content,writer)   
+		VALUES(
+	   				#{num},
+	   				#{content},
+	   				#{writer}	
+				)
+	</insert>
+	
+	<delete id="deleteReply" parameterType="com.cos.prologstart.vo.ReplyVO">
+		DELETE 
+		FROM replyTable
+        WHERE reply_num = #{reply_num}
+	</delete>
+	
+	<delete id="deleteAllReply" parameterType="com.cos.prologstart.vo.ReplyVO">
+		DELETE 
+		FROM replyTable
+        WHERE num = #{num}
+	</delete>
+	
+	 <update id="updateReply" parameterType="com.cos.prologstart.vo.ReplyVO">
+		UPDATE replyTable
+        SET 
+        	content = #{content},
+        	regDate = NOW()
+       
+        WHERE reply_num = #{reply_num}
+	</update> 
+
+	<select id="memberLogin" resultType="com.cos.prologstart.vo.LoginVO">
+		select
+			user_id,
+			pw
+		from loginTable11   
+		where user_id = #{user_id}
+		and pw = #{pw}
+		
+	</select>
+	
+<!-- 	<select id="getAllUser" resultType="com.cos.prologstart.vo.LoginVO">
+		select 
+			*
+		from loginTable11   
+	</select> -->
+	
+	<select id="getAllUser" resultType="com.cos.prologstart.domain.user.User">
+		select 
+		 	username,
+	 		password,
+	 		name,
+	 		id,
+	 		email,
+			phone,
+			gender,
+			profileImageUrl,
+			createDate,
+			role
+		
+		from  user   
+	</select>
+	
+	<delete id="deleteMember" parameterType="com.cos.prologstart.domain.user.User">
+		DELETE 
+		FROM user 
+        WHERE username = #{username}
+	</delete>
+	
+</mapper>
+

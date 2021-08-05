@@ -1,0 +1,149 @@
+@charset "UTF-8";
+
+@font-face {
+    font-family: 'GongGothicBold';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicBold.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+*{
+	font-family: 'GongGothicBold';
+	/* background: #FAFAFA; */
+	
+}
+
+/* html, body {
+	margin: 0;
+	padding: 0;
+} */
+
+#container{
+	background: #0A91AB;
+} 
+
+a{
+	color: #0A91AB;
+    text-decoration: none;
+    background-color: transparent;
+    font-size:30px;
+}
+
+
+#container2 {
+	width: 935px;
+	display: flex;
+	flex-direction: column;
+	padding: 10px;
+	background: #0A91AB;
+	justify-content: center;
+	align-items: center;
+	margin-top: 150px;
+	margin: 0 auto;
+}
+
+#logo h1{
+	text-align: left;
+	margin-top: 162px;
+	display: inline-block;
+	font-size: 55px;
+	margin-left:25px;
+}
+
+
+#logo a {
+	text-decoration: none;
+	color:#FFC045;
+	font-size:60px;
+	
+}
+
+#logo input {
+	float: right;
+}
+
+input button {
+	background-color: cornflowerblue;
+	color: white;
+	padding: 5px 20px;
+	border-radius: 10px;
+	cursor: pointer;
+}
+
+#input1{
+	font-family: 'GongGothicBold';
+	width:80px;
+	height:30px;
+	font-size:14px;
+	margin-top: 98px;
+	margin-left:-10px;
+	background-color:#FFC045;
+	color:white;
+	border:0;
+	border-top-left-radius : 10px;
+	border-top-right-radius : 2px;
+	border-bottom-right-radius : 60px;
+	border-bottom-left-radius : 70px;
+	
+}
+
+#input2{
+	
+	font-family: 'GongGothicBold'; 
+	width:180px;
+	height:30px;
+	font-size:14px;
+	background-color:#FFF;
+	border:1px solid #FFC045;
+	margin:3px;
+	margin-top: 350px;
+
+}
+
+#input3{
+	
+	font-family: 'GongGothicBold';
+	width:80px;
+	height:32px;
+	font-size:14px;
+	background-color:#FFC045;
+	color:white;
+	border:0;
+	margin-top: 350px;
+
+}
+
+
+#nav {
+	padding : 30px;
+	display:inline-block;
+	text-decoration: none;
+	color: #0A91AB;
+	font-size: 25px;
+}
+
+#nav ul li{
+	display:none;
+}
+
+#nav a {
+	text-decoration: none;
+	color: #ffffff;
+}
+
+#wrapper{
+	display: inline-block; 
+	margin-top: 60px;
+	text-align:center;
+}
+
+
+#wrapper img {
+/* 	object-fit: cover; */
+	width:40%;
+	height:100%;
+	margin:5px;
+	text-align:center;
+}
+
+
