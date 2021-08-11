@@ -259,4 +259,42 @@ mybatis.mapper-locations=classpath:mapper/**/**.xml
 </delete>	
 </mapper>
 ```
+4. VO (lombok 이용)
 
+(1) BoardVO 
+```
+@Data
+public class BoardVO {
+	
+	private String user_id; //아이디
+	private int num; //글번호
+	private String lang; //게시판 카테고리
+	private String title; //제목
+	private String contents; //내용
+	private String image; //이미지
+	private String date1; //작성일
+	
+	public BoardVO() {} 
+	
+	public BoardVO(String user_id,int num, String lang, String title,String contents,String image) {
+		this.user_id =user_id; 
+		this.num =num;
+		this.lang =lang;
+		this.title =title;
+		this.contents =contents;
+		this.image =image;
+		
+	}
+}
+```
+(2) ReplyVO 
+```
+@Data
+public class ReplyVO {
+	private int num; //게시글 번호
+	private int reply_num; //댓글 번호
+	private String content; //댓글 내용
+	private String writer; //작성자
+	private String regDate; //작성일	
+}
+```
