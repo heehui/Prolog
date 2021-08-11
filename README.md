@@ -79,19 +79,17 @@ datasource:
 mybatis.mapper-locations=classpath:mapper/**/**.xml
 ```
 3.mybatismapper.xml
-```
-<mapper namespace="com.cos.prologstart.dao.BoardDAO">
-```
 - 게시판 글쓰기 후 insert
 ```
+<mapper namespace="com.cos.prologstart.dao.BoardDAO">
     <insert id="addBoard" useGeneratedKeys="true" keyProperty="num"> //글번호는 쿼리에서 AUTO_INCREMENT로 자동 증가하게 함
 		INSERT INTO   
 	    	boardTable2
 	   			(
 	   				user_id,
 	   				lang,
-					  title,
-					  contents,
+					title,
+					contents,
 				  	image
 				)
 	    	VALUES
@@ -104,142 +102,161 @@ mybatis.mapper-locations=classpath:mapper/**/**.xml
 				)
     </insert>
 ```
-	<select id="getAllBoard" resultType="com.cos.prologstart.vo.BoardVO">
-		SELECT
-			user_id, num, lang, title, contents, image, DATE_FORMAT(date1, '%Y-%m-%d %T') as 'date1'
-
-		FROM
-			boardTable2
-		ORDER BY num desc
-	</select>
-	
-	
-	<select id="getMenu" resultType="com.cos.prologstart.vo.BoardVO">
-		SELECT
-			 user_id, num, lang, title, contents, image, DATE_FORMAT(date1, '%Y-%m-%d %T') as 'date1'
-		FROM
-			boardTable2
-		WHERE
-			lang = #{lang}
-	</select>
-	
-	
-	 <select id="getBoardOne" resultType="com.cos.prologstart.vo.BoardVO">
-		SELECT
-			num, lang, title, contents, image, DATE_FORMAT(date1, '%Y-%m-%d %T') as 'date1'
-		FROM
-			boardTable2
-		WHERE
-			num = #{num}
-	</select>
-	
-	<update id="updateclear" parameterType="com.cos.prologstart.vo.BoardVO">
-		UPDATE boardTable2
+- 모든 게시물 조회
+```
+<select id="getAllBoard" resultType="com.cos.prologstart.vo.BoardVO"> <!-- 매핑하려는 자바 클래스의 전체 경로(BoardVO)를 입력-->
+	SELECT
+		user_id, num, lang, title, contents, image, DATE_FORMAT(date1, '%Y-%m-%d %T') as 'date1' <!-- 날짜를 2021-08-04 19:49:58 형태로 -->
+	FROM
+		boardTable2
+	ORDER BY num desc
+</select>
+```	
+- 각 카테고리별 게시판에 게시물 조회
+```
+<select id="getMenu" resultType="com.cos.prologstart.vo.BoardVO">
+	SELECT
+		 user_id, num, lang, title, contents, image, DATE_FORMAT(date1, '%Y-%m-%d %T') as 'date1'
+	FROM
+		boardTable2
+	WHERE
+		lang = #{lang} <!-- lang은 게시판 카테고리명 -->
+</select>
+```
+- 게시물 상세내용 보여주기
+```
+ <select id="getBoardOne" resultType="com.cos.prologstart.vo.BoardVO"> 
+	SELECT
+		num, lang, title, contents, image, DATE_FORMAT(date1, '%Y-%m-%d %T') as 'date1'
+	FROM
+		boardTable2
+	WHERE
+		num = #{num}
+</select>
+```
+- 게시글 수정
+```
+<update id="updateclear" parameterType="com.cos.prologstart.vo.BoardVO">
+	UPDATE boardTable2
         SET 
         	lang = #{lang},
         	title = #{title},
         	image = #{image},
-            contents = #{contents},
-            date1 = NOW()
-            
-        WHERE num = #{num}
-
-	</update>
-	
-	<delete id="deleteBoard" parameterType="com.cos.prologstart.vo.BoardVO">
-		DELETE 
-		FROM boardTable2
-        WHERE num = #{num}
-	</delete>
-	
-	<select id="goMypage" resultType="com.cos.prologstart.vo.BoardVO">
-		SELECT
-			user_id, num, lang, title, contents, image, DATE_FORMAT(date1, '%Y-%m-%d %T') as 'date1'
-		FROM
-			boardTable2
-		WHERE
-			user_id = #{user_id}
+            	contents = #{contents},
+            	date1 = NOW()
+	WHERE 
+		num = #{num}
+</update>
+```
+- 게시글 삭제
+```
+<delete id="deleteBoard" parameterType="com.cos.prologstart.vo.BoardVO">
+	DELETE 
+	FROM 
+		boardTable2
+        WHERE 
+		num = #{num} <!-- 글번호를 불러와 삭제 -->
+</delete>
+```
+- 마이페이지에서 내가쓴 글 보여주기
+```
+<select id="goMypage" resultType="com.cos.prologstart.vo.BoardVO">
+	SELECT
+		user_id, num, lang, title, contents, image, DATE_FORMAT(date1, '%Y-%m-%d %T') as 'date1'
+	FROM
+		boardTable2
+	WHERE
+		user_id = #{user_id} <!-- 로그인한 id로 조회 -->
 	</select>
-	
-	<select id="readReply" resultType="com.cos.prologstart.vo.ReplyVO">
-		select 
-			reply_num,
-			content,
-			writer,
-			DATE_FORMAT(regDate, '%Y-%m-%d %T') as 'regDate'
-		from replyTable   
-		where num = #{num}
-		
-	</select>
-	
-	<insert id="writeReply">
-		insert into 
+```
+- 댓글 작성
+```
+<insert id="writeReply">
+	INSERT INTO
 		replyTable(num,content,writer)   
-		VALUES(
-	   				#{num},
-	   				#{content},
-	   				#{writer}	
-				)
-	</insert>
-	
-	<delete id="deleteReply" parameterType="com.cos.prologstart.vo.ReplyVO">
-		DELETE 
-		FROM replyTable
-        WHERE reply_num = #{reply_num}
-	</delete>
-	
-	<delete id="deleteAllReply" parameterType="com.cos.prologstart.vo.ReplyVO">
-		DELETE 
-		FROM replyTable
-        WHERE num = #{num}
-	</delete>
-	
-	 <update id="updateReply" parameterType="com.cos.prologstart.vo.ReplyVO">
-		UPDATE replyTable
+	VALUES(
+	   		#{num},
+	   		#{content},
+	   		#{writer}	
+		)
+</insert>
+```
+- 댓글 조회
+```
+<select id="readReply" resultType="com.cos.prologstart.vo.ReplyVO">
+	SELECT 
+		reply_num,
+		content,
+		writer,
+		DATE_FORMAT(regDate, '%Y-%m-%d %T') as 'regDate'
+	FROM 
+		replyTable   
+	WHERE 
+		num = #{num}
+</select>
+```	
+- 댓글 수정
+```
+<update id="updateReply" parameterType="com.cos.prologstart.vo.ReplyVO">
+	UPDATE replyTable
         SET 
         	content = #{content},
         	regDate = NOW()
        
-        WHERE reply_num = #{reply_num}
-	</update> 
-
-	<select id="memberLogin" resultType="com.cos.prologstart.vo.LoginVO">
-		select
-			user_id,
-			pw
-		from loginTable11   
-		where user_id = #{user_id}
-		and pw = #{pw}
+        WHERE 
+		reply_num = #{reply_num}
+</update>
+```
+- 댓글 삭제	
+```	
+<delete id="deleteReply" parameterType="com.cos.prologstart.vo.ReplyVO">
+	DELETE 
+	FROM 
+		replyTable
+        
+	WHERE 
+		reply_num = #{reply_num}
+</delete>
+```
+- 모든 댓글 삭제(관리자 권한)
+```
+<delete id="deleteAllReply" parameterType="com.cos.prologstart.vo.ReplyVO">
+	DELETE 
+	FROM 
+		replyTable
+        WHERE 
+		num = #{num}
+</delete>
+```	
+	 
+- 회원 정보 조회(관리자 권한)	
+```	
+<select id="getAllUser" resultType="com.cos.prologstart.domain.user.User">
+	SELECT 
+		username,
+	 	password,
+	 	name,
+	 	id,
+	 	email,
+		phone,
+		gender,
+		profileImageUrl,
+		createDate,
+		role
 		
-	</select>
-	
-<!-- 	<select id="getAllUser" resultType="com.cos.prologstart.vo.LoginVO">
-		select 
-			*
-		from loginTable11   
-	</select> -->
-	
-	<select id="getAllUser" resultType="com.cos.prologstart.domain.user.User">
-		select 
-		 	username,
-	 		password,
-	 		name,
-	 		id,
-	 		email,
-			phone,
-			gender,
-			profileImageUrl,
-			createDate,
-			role
-		
-		from  user   
-	</select>
-	
-	<delete id="deleteMember" parameterType="com.cos.prologstart.domain.user.User">
-		DELETE 
-		FROM user 
-        WHERE username = #{username}
-	</delete>
-	
+	FROM
+		user   
+</select>
+```
+- 회원 강제 탈퇴(관리자 권한)
+```
+<delete id="deleteMember" parameterType="com.cos.prologstart.domain.user.User">
+	DELETE 
+	FROM 
+		user 
+        WHERE 
+		username = #{username}
+</delete>	
 </mapper>
+```
 
