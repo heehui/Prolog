@@ -10,7 +10,8 @@
 	   				lang,
 					title,
 					contents,
-					image
+					image,
+					user_num
 				)
 	    	VALUES
 	   			(
@@ -18,13 +19,14 @@
 	   				#{lang},
 	   				#{title},
 	   				#{contents},
-	   				#{image}
+	   				#{image},
+	   				#{user_num}
 	   				
 				)
     </insert>
 	<select id="getAllBoard" resultType="com.cos.prologstart.vo.BoardVO">
 		SELECT
-			user_id, num, lang, title, contents, image, DATE_FORMAT(date1, '%Y-%m-%d %T') as 'date1'
+			user_id,user_num, num, lang, title, contents, image, DATE_FORMAT(date1, '%Y-%m-%d %T') as 'date1',hit, reply_cnt
 
 		FROM
 			boardTable2
@@ -34,7 +36,7 @@
 	
 	<select id="getMenu" resultType="com.cos.prologstart.vo.BoardVO">
 		SELECT
-			 user_id, num, lang, title, contents, image, DATE_FORMAT(date1, '%Y-%m-%d %T') as 'date1'
+			 user_id, user_num,num, lang, title, contents, image, DATE_FORMAT(date1, '%Y-%m-%d %T') as 'date1', hit,reply_cnt
 		FROM
 			boardTable2
 		WHERE
@@ -44,7 +46,7 @@
 	
 	 <select id="getBoardOne" resultType="com.cos.prologstart.vo.BoardVO">
 		SELECT
-			num, lang, title, contents, image, DATE_FORMAT(date1, '%Y-%m-%d %T') as 'date1'
+			num, user_num, lang, title, contents, image, DATE_FORMAT(date1, '%Y-%m-%d %T') as 'date1',hit,reply_cnt
 		FROM
 			boardTable2
 		WHERE
@@ -64,6 +66,7 @@
 
 	</update>
 	
+	
 	<delete id="deleteBoard" parameterType="com.cos.prologstart.vo.BoardVO">
 		DELETE 
 		FROM boardTable2
@@ -72,12 +75,28 @@
 	
 	<select id="goMypage" resultType="com.cos.prologstart.vo.BoardVO">
 		SELECT
-			user_id, num, lang, title, contents, image, DATE_FORMAT(date1, '%Y-%m-%d %T') as 'date1'
+			user_id, user_num, num, lang, title, contents, image, DATE_FORMAT(date1, '%Y-%m-%d %T') as 'date1', hit, reply_cnt
 		FROM
 			boardTable2
 		WHERE
 			user_id = #{user_id}
 	</select>
+	
+	<update id="hitCount" parameterType="com.cos.prologstart.vo.BoardVO">
+		UPDATE boardTable2
+        SET 
+        	hit = IFNULL(HIT, 0) + 1
+            
+        WHERE num = #{num}
+    
+	</update>
+	
+ 	<update id="ReplyCount" parameterType="int">
+		UPDATE boardTable2
+		SET reply_cnt = (select count(*) from replyTable where num = #{num})
+		WHERE num = #{num}	
+
+	</update> 
 	
 	<select id="readReply" resultType="com.cos.prologstart.vo.ReplyVO">
 		select 
@@ -96,7 +115,7 @@
 		VALUES(
 	   				#{num},
 	   				#{content},
-	   				#{writer}	
+	   				#{writer}
 				)
 	</insert>
 	
@@ -119,23 +138,14 @@
         	regDate = NOW()
        
         WHERE reply_num = #{reply_num}
-	</update> 
-
-	<select id="memberLogin" resultType="com.cos.prologstart.vo.LoginVO">
-		select
-			user_id,
-			pw
-		from loginTable11   
-		where user_id = #{user_id}
-		and pw = #{pw}
-		
-	</select>
+	</update>
 	
-<!-- 	<select id="getAllUser" resultType="com.cos.prologstart.vo.LoginVO">
-		select 
-			*
-		from loginTable11   
-	</select> -->
+	<select id="myReplyList" resultType="com.cos.prologstart.vo.ReplyVO">
+		SELECT *
+		FROM replyTable
+        WHERE writer = #{user_id}
+	</select> 
+
 	
 	<select id="getAllUser" resultType="com.cos.prologstart.domain.user.User">
 		select 

@@ -35,14 +35,18 @@ $(document).ready(function() {
        
        result.forEach(function(item){
     
-    	   html+= "<div class='image1'><a href = 'loginboardView?contents=" + item.contents + 
+    	   html+= "<div class='image1'><a href = 'detailView?contents=" + item.contents + 
         				'&image=' + item.image + 
         				'&title=' + item.title +
         				'&user_id=${principal.user.username}' +
         				'&writer=' + item.user_id +
+        				'&user_num=' + item.user_num +
         				'&num=' + item.num +
+        				'&reply_cnt=' + item.reply_cnt +
+        				'&hit=' + item.hit +
         				'&date1=' + item.date1 +
-        				'&lang=' + item.lang + "'>" + "<img id='hov1' src='/upload/" + item.image + "' width='200'  height='200'></a><h6 id='date1'>작성일: " + item.date1 + "</h6></div>";
+        				'&lang=' + item.lang + "'>" + "<img id='hov1' src='/upload/" + item.image + "' width='200'  height='200'></a><h6 id='date1'>작성일: " + item.date1 
+        						+ '<br><img src="../images/click.png">' + item.hit + ' 댓글수:' + item.reply_cnt + "</h6></div>";
        })    
        $("#listArea").append(html);
      }});

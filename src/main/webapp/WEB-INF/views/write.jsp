@@ -7,16 +7,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-<%@ include file="../views/layout/header2.jsp"%>
+<%@ include file="../views/layout/header.jsp"%>  <!-- 글쓰기 화면  -->
 
-<div style="margin-bottom:10px">
-  <h1 align="center">글쓰기</h1>
-</div>
+<div style="margin-bottom:10px"></div>
+
+<main class="uploadContainer">
+           <!--게시글업로드 박스-->
+            <section class="upload">
+               
+               <!--게시글 업로드 로고-->
+                <div class="upload-top">
+                    <a href="index.jsp" class="">
+                        <img src="/images/logo_t.jpg" alt="">
+                    </a>
+                    <p>게시글 업로드</p>
+                </div>
+                <!--게시글 업로드 로고 end-->
 
 <div class="container" style="margin-top:30px">
 	<div class="row">
 		<div class="col-sm-12">
-	      <h2>글쓰기</h2>
+	      
 	        <form action="writeAfter" method = "post" enctype="multipart/form-data">
 	        	<div class="form-group">
 				  <select name="lang">
@@ -37,13 +48,18 @@
 			    </div>
 			    <div class="form-group">
 				  <label for="comment">내용:</label>
-				  <textarea class="form-control" rows="5" id="contents" name = "contents"></textarea>
+				  <textarea class="caption" required="required" name="contents" onkeydown="resize(this)" onkeyup="resize(this)"></textarea>
 				</div>
 				<input type="hidden" name="user_id" value="${principal.user.username}">
+				<input type="hidden" name="user_num" value="${principal.user.id}">
 			    <button type="submit" class="btn btn-info">발행</button>
 			  </form>
+			</div>
 		</div>
 	</div>
-</div>
+  </section>
+            <!--게시글업로드 박스 end-->
+</main>
+	
 </body>
 </html>

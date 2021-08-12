@@ -6,12 +6,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.cos.prologstart.vo.BoardVO;
-import com.cos.prologstart.vo.LoginVO;
 import com.cos.prologstart.vo.ReplyVO;
-import com.cos.prologstart.web.dto.user.UserProfileDto;
 import com.cos.prologstart.web.dto.user.UserUpdateDto;
-
-
 
 
 @Mapper 
@@ -24,17 +20,19 @@ public interface BoardDAO {
 	public int updateclear(int num,String lang,String title,String image, String contents);
 	public int deleteBoard(int num);
 	public List<BoardVO> goMypage(String user_id);
+	public int hitCount(int num);
 
+	
 	public List<ReplyVO> readReply(int num)throws Exception;
 	public boolean writeReply(int num, String writer,String content)throws Exception;
 	public int updateReply(int reply_num, String content)throws Exception;
 	public int deleteReply(int reply_num)throws Exception;
 	public int deleteAllReply(int num)throws Exception;
-	public LoginVO memberLogin(LoginVO vo) throws Exception;//
-	
-	public ArrayList<LoginVO> admin_login();
+
+	public List<ReplyVO> myReplyList(String user_id)throws Exception;
 	public ArrayList<UserUpdateDto> getAllUser();
 	public int deleteMember(String user_id);
+
 	
 
 }

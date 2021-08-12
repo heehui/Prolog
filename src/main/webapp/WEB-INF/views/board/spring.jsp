@@ -34,16 +34,16 @@
 			
 			<c:forEach var="imsi" items="${menu}"> 
 		        				
-					<div class='image1'><a href = 'loginboardView?contents=${imsi.contents}&image=${imsi.image}&title=${imsi.title}&lang=${imsi.lang}&num=${imsi.num}&date1=${imsi.date1}&writer=${imsi.user_id}'>
-						 <img id='hov1' src='/upload/${imsi.image}' width="200" height="200"></a><h6 id='date1'>작성일: ${imsi.date1}</h6></div>
+					<div class='image1'><a href = 'detailView?contents=${imsi.contents}&image=${imsi.image}&title=${imsi.title}&lang=${imsi.lang}&num=${imsi.num}&date1=${imsi.date1}&writer=${imsi.user_id}&hit=${imsi.hit}&user_num=${imsi.user_num}'>
+						 <img id='hov1' src='/upload/${imsi.image}' width="200" height="200"></a><h6 id='date1'>작성일: ${imsi.date1}<br>조회수: ${imsi.hit}</h6></div>
 				</c:forEach>
 			</c:when>
 			<c:otherwise>
 			
 				<c:forEach var="imsi" items="${menu}"> 
 		        				
-					<div class='image1'><a href = 'loginboardView?contents=${imsi.contents}&image=${imsi.image}&title=${imsi.title}&lang=${imsi.lang}&num=${imsi.num}&date1=${imsi.date1}&user_id=${principal.user.username}&writer=${imsi.user_id}'>
-						 <img src='/upload/${imsi.image}' width="200" height="200"></a><h6 id='date1'>작성일: ${imsi.date1}</h6></div>
+					<div class='image1'><a href = 'detailView?contents=${imsi.contents}&image=${imsi.image}&title=${imsi.title}&lang=${imsi.lang}&num=${imsi.num}&date1=${imsi.date1}&user_id=${principal.user.username}&writer=${imsi.user_id}&hit=${imsi.hit}&user_num=${imsi.user_num}'>
+						 <img src='/upload/${imsi.image}' width="200" height="200"></a><h6 id='date1'>작성일: ${imsi.date1}<br>조회수: ${imsi.hit}</h6></div>
 				</c:forEach>
 			</c:otherwise>
 			</c:choose>		

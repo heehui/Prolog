@@ -35,20 +35,25 @@
                 <c:choose>
                     <c:when test="${dto.pageOwnerState}">
                         <button class="cta" onclick="location.href='write'">새 글 등록</button>
+                        <button class="cta" onclick="location.href='myReplyList?user_id=${principal.user.username}'">내가 작성한 댓글 보기</button>
                     </c:when>
-
+                    
                 </c:choose>
-
-                <c:choose>
-                    <c:when test="${dto.pageOwnerState}">
-                        <button class="modi" onclick="popup('.modal-info')">
-                    <i class="fas fa-cog"></i>
-                </button>
-                    </c:when>
-
-                </c:choose>
-
-            </div>
+   
+						<c:choose>
+							<c:when test="${dto.subscribeState}">
+								<button class="cta blue" onclick="toggleSubscribe(${dto.user.id}, this)">구독취소</button>
+							</c:when>
+							<c:otherwise>
+								<button class="cta" onclick="toggleSubscribe(${dto.user.id}, this)">구독하기</button>
+							</c:otherwise>
+						</c:choose>
+				
+				
+				<button class="modi" onclick="popup('.modal-info')">
+					<i class="fas fa-cog"></i>
+				</button>
+			</div>
 
 			<div class="subscribe">
 				<ul>
@@ -99,7 +104,7 @@
 			<div id="grid">
 				<c:forEach var="menu" items="${menu}"> 
 		        				
-					<div class='image1'><a href = 'loginboardView?contents=${menu.contents}&image=${menu.image}&title=${menu.title}&lang=${menu.lang}&num=${menu.num}&date1=${menu.date1}&user_id=${principal.user.username}&writer=${principal.user.username}'>
+					<div class='image1'><a href = 'detailView?contents=${menu.contents}&image=${menu.image}&title=${menu.title}&lang=${menu.lang}&num=${menu.num}&date1=${menu.date1}&user_id=${principal.user.username}&writer=${principal.user.username}&hit=${menu.hit}&user_num=${menu.user_num}'>
 						 <img src='/upload/${menu.image}' width="200" height="200"></a><h6 id='date1'>작성일: ${menu.date1}</h6></div>
 				</c:forEach>
 				

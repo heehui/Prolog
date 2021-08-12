@@ -58,12 +58,14 @@ function subscribeInfoModalOpen(pageUserId) {
 }
 
 function getSubscribeModalItem(u) {
+	
 	let item = `<div class="subscribe__item" id="subscribeModalItem-${u.id}">
+	
 	<div class="subscribe__img">
 		<img src="/upload/${u.profileImageUrl}" onerror="this.src='/images/jju.jpg'"/>
 	</div>
 	<div class="subscribe__text">
-		<h2>${u.username}</h2>
+		<a href="/${u.toUserId}?user_id=${u.username}">${u.username}</a>
 	</div>
 	<div class="subscribe__btn">`;
 	

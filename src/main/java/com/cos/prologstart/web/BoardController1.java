@@ -1,4 +1,4 @@
-package com.cos.prologstart.board1;
+package com.cos.prologstart.web;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,15 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.cos.prologstart.service.BoardService1;
 import com.cos.prologstart.vo.BoardVO;
-import com.cos.prologstart.vo.LoginVO;
 import com.cos.prologstart.vo.ReplyVO;
 
 
@@ -52,7 +50,7 @@ public class BoardController1 {
 	
 	@GetMapping("/write")
 	public String write() {
-		return "write3"; //css 수정한 글쓰기 화면
+		return "write"; 
 	}
 	
 	
@@ -61,17 +59,17 @@ public class BoardController1 {
 		return "admin/adminWrite";
 	}
 	
-	@GetMapping("/loginboardView") //게시글 상세보기를 누르면 보이는 화면
+	@GetMapping("/detailView") //게시글 상세보기를 누르면 보이는 화면
 	public String loginview(
 			HttpServletRequest req, HttpSession session,
 			 		   @RequestParam("num")int num,
 					   @RequestParam("title")String title,
 					   @RequestParam("image")String image,
 					   @RequestParam("lang")String lang,
-					//  @RequestParam("reply_num")int reply_num,
 					   @RequestParam("writer")String writer,
 					   @RequestParam("date1")String date1,
-			/* @RequestParam("contents")String contents, */
+					   @RequestParam("hit")int hit,
+					   @RequestParam("user_num")int user_num,
 					   Model model1) throws Exception{
 		
 		 String contents = req.getParameter("contents"); 
@@ -84,14 +82,17 @@ public class BoardController1 {
 		model1.addAttribute("contents", contents);
 		model1.addAttribute("date1", date1);
 		model1.addAttribute("writer", writer);
-
+		model1.addAttribute("user_num", user_num);
+		model1.addAttribute("hit", bs.hitCount(num));
+		
+		
 		String user_id =req.getParameter("user_id");
 		session.setAttribute("user_id", user_id);
 		
 		List<ReplyVO> reList = bs.readReply(num);//댓글이 보이도록
 		model1.addAttribute("reList", reList);//List로 넘김
 		
-		return "loginboardView"; 
+		return "detailView"; 
 	}
 	
 	
@@ -122,7 +123,8 @@ public class BoardController1 {
 			HttpSession session,
 			@RequestParam("file") MultipartFile file,
 			@RequestParam("lang") String lang,
-			@RequestParam("title")String title, 
+			@RequestParam("title")String title,
+			@RequestParam("user_num")int user_num,
 				Model model1) throws IllegalStateException, IOException {
 
 		
@@ -139,7 +141,7 @@ public class BoardController1 {
 			file.transferTo(new File(path + file.getOriginalFilename()));
 			}
 		
-		bs.addBoard(new BoardVO(user_id,0,lang, title, contents, file.getOriginalFilename())); //게시글 insert됨
+		bs.addBoard(new BoardVO(user_id,user_num,0,lang, title, contents, file.getOriginalFilename())); //게시글 insert됨
 		return "board/mainBoard";
 	}
 	
@@ -152,6 +154,13 @@ public class BoardController1 {
 	 public String userList(Model model1) {
 		 model1.addAttribute("getAllUser", bs.getAllUser()); //전체 회원정보를 보여줌
 		 return "admin/userList";
+	 }
+	 
+	 @GetMapping("/myReplyList") //내가 쓴 댓글 전체보기
+	 public String myReplyList(Model model1,
+			 					@RequestParam("user_id")String user_id) throws Exception {
+		 model1.addAttribute("myReplyList", bs.myReplyList(user_id)); //전체 회원정보를 보여줌
+		 return "replyList";
 	 }
 	
 	 
@@ -298,28 +307,14 @@ public class BoardController1 {
 			
 		  return "view"; //이 화면에서 수정된 화면을 바로 보여줌
 	  }
+	  
+	  
 	  @GetMapping("/delete")//게시글 삭제
 	  public String delete(@RequestParam("num")int num) throws Exception {
 		  bs.deleteBoard(num); //글번호로 게시글 삭제
 		  bs.deleteAllReply(num); //삭제한 게시글에 있는 댓글도 삭제
 		  return "board/mainBoard";
 	  }
-	  
-	  
-	  @GetMapping("/mypage") //user_id 받아서 마이페이지 버튼 누르면 이곳으로 이동
-		public String mypage(
-							 Model model1,
-							 HttpServletRequest req, 
-							 HttpSession session) {
-		  
-		  String user_id = req.getParameter("user_id");
-		  session.setAttribute("user_id", user_id);
-		  
-			model1.addAttribute("menu", bs.goMypage(user_id)); //해당 user_id를 가진 게시글을 모두 조회
-		
-			return "mypage";
-
-		}
 	  
 	  
 		@GetMapping("/writeReply") //댓글 작성
@@ -332,7 +327,6 @@ public class BoardController1 {
 				bs.writeReply(num,writer,content); //댓글번호, 작성자, 댓글내용 insert
 				
 				return "board/mainBoard";
-			
 		}
 		
 		@GetMapping("/deleteReply")//댓글 삭제
@@ -341,7 +335,7 @@ public class BoardController1 {
 								Model model1) throws Exception {
 	
 				bs.deleteReply(reply_num);//해당 댓글 번호를 가져와서 댓글 삭제
-			
+		
 				return "board/mainBoard";
 			
 		}

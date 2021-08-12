@@ -1,4 +1,4 @@
-package com.cos.prologstart.board1;
+package com.cos.prologstart.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.cos.prologstart.dao.BoardDAO;
 import com.cos.prologstart.vo.BoardVO;
-import com.cos.prologstart.vo.LoginVO;
 import com.cos.prologstart.vo.ReplyVO;
 import com.cos.prologstart.web.dto.user.UserProfileDto;
 import com.cos.prologstart.web.dto.user.UserUpdateDto;
@@ -53,6 +52,10 @@ public class BoardService1 {
 	public List<BoardVO> goMypage(String user_id){
 		return bdao.goMypage(user_id);
 	}
+	public int hitCount(int num) {
+		return bdao.hitCount(num);
+	}
+	
 	
 	public List<ReplyVO> readReply(int num)throws Exception{
 		return bdao.readReply(num);
@@ -73,14 +76,10 @@ public class BoardService1 {
 	public int deleteAllReply(int num)throws Exception{
 		return bdao.deleteAllReply(num);
 	}
-	
-	public LoginVO memberLogin(LoginVO vo) throws Exception{//
-		return bdao.memberLogin(vo);
+	public List<ReplyVO> myReplyList(String user_id)throws Exception{
+		return bdao.myReplyList(user_id);
 	}
 	
-	/*
-	 * public ArrayList<LoginVO> getAllUser(){ return bdao.getAllUser(); }
-	 */
 	
 	public ArrayList<UserUpdateDto> getAllUser(){
 		return bdao.getAllUser();
@@ -92,8 +91,5 @@ public class BoardService1 {
 		return bdao.deleteMember(user_id);
 	}
 	
-	public ArrayList<LoginVO> admin_login(){
-		return bdao.admin_login();
-	}
-	
+
 }

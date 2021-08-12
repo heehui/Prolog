@@ -58,7 +58,7 @@
        </div>
        
       <div class="lang_two">
-         작성자: ${writer}<br>
+         작성자: <a href="/${user_num}?user_id=${writer}" >${writer}</a><br>
          작성일: ${date1}
       </div>
    </div>

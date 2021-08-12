@@ -10,8 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.cos.prologstart.board1.BoardService1;
+
 import com.cos.prologstart.config.auth.PrincipalDetails;
+import com.cos.prologstart.service.BoardService1;
 import com.cos.prologstart.service.UserService;
 import com.cos.prologstart.web.dto.user.UserProfileDto;
 
