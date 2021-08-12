@@ -22,7 +22,7 @@
  #list{ float: right; }
    
 /*   #contents{
-	white-space:pre-line;
+	white-space:pre-line; /* 수정 */
 	} */
 </style>
 
