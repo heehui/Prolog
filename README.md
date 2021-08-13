@@ -1,7 +1,7 @@
 
 ### spring boot와 Mybatis, JPA, MariaDB로 만든 '공유블로그 Prolog' 입니다.
 #### 로그인 및 회원가입, 게시판, 댓글 기능, 관리자 기능이 포함되어있습니다.
-###### 제가 맡은 게시판, 댓글, 관리자 기능 파트에 대해 작성했습니다.
+###### - 제가 맡은 게시판, 댓글, 관리자 기능 파트에 대해 작성했습니다.
 ---
 1. 프로젝트 개요 
 ###### - 공통 관심사를 가진 사람들이 모여 정보를 나누는 것이 보편화된 시대에 맞게 프로그래밍에 관심을 가진 사람들이 모여 정보를 공유할 수 있는 공간이다.
@@ -89,7 +89,6 @@
 
 #
 
-BoardDAO.java
 
 4.1 DB 테이블 쿼리문
 
@@ -111,6 +110,7 @@ CREATE TABLE `boardtable2` (
 	`contents` VARCHAR(1000) NOT NULL COLLATE 'utf8mb3_general_ci', -- 게시글 내용
 	`image` VARCHAR(200) NULL DEFAULT NULL COLLATE 'utf8mb3_general_ci', -- 첨부한 이미지
 	`date1` TIMESTAMP NULL DEFAULT current_timestamp(), -- 날짜
+	`hit` INT(11) NULL DEFAULT '0', -- 조회수
 	INDEX `num` (`num`) USING BTREE,
 	INDEX `user_id` (`user_id`) USING BTREE
 );
@@ -238,38 +238,161 @@ public class BoardVO {
 	private String contents; //내용
 	private String image; //이미지
 	private String date1; //작성일
-	
-	public BoardVO() {} 
-	
-	public BoardVO(String user_id,int num, String lang, String title,String contents,String image) {
-		this.user_id =user_id; 
-		this.num =num;
-		this.lang =lang;
-		this.title =title;
-		this.contents =contents;
-		this.image =image;
-		
-	}
 }
 ```
 
 4.3.1 게시물 작성 및 등록
 1) BoardDAO.java
-2) BoardService.java
+```
+@Mapper 
+public interface BoardDAO { 
+	
+	public boolean addBoard(BoardVO bvo);
+```	
+2) BoardService1.java
+```
+@Service
+public class BoardService1 {
+	
+	@Autowired 
+	private BoardDAO bdao; //DAO객체를 한번에 받아서
+	
+	
+	public boolean addBoard(BoardVO bvo) {
+		return bdao.addBoard(bvo);
+	}
+```
 3) BoardController1.java
+```
+@Controller
+public class BoardController1 {
+	
+	@Autowired
+	private BoardService1 bs;
+	
+@GetMapping("/write") //글작성 버튼을 누르면 이곳으로 이동
+	public String write() {
+		return "write"; 
+	}
+```
+```
+@PostMapping("/writeAfter")  //글 작성 후 '발행'을 누르면 이곳으로 이동
+	public String writeAction(
+			HttpServletRequest req,
+			HttpSession session,
+			@RequestParam("file") MultipartFile file, //이미지파일
+			@RequestParam("lang") String lang, //게시판 카테고리명
+			@RequestParam("title")String title, //글 제목
+			@RequestParam("user_num")int user_num, //회원번호
+				Model model1) throws IllegalStateException, IOException {
+
+		
+		 String contents = req.getParameter("contents"); //글 내용
+		 contents = contents.replace("\r\n", "<br>"); //db에 저장할 때, 개행부분을 <br>태그로 변경해준 후 저장
+		
+		
+		String user_id=req.getParameter("user_id"); //회원 아이디
+		session.setAttribute("user_id", user_id);
+	
+		String path = "C:/workspace/springbootwork/upload/"; //이미지가 저장될 외부 경로 지정
+		
+		if (!file.getOriginalFilename().isEmpty()) {
+			file.transferTo(new File(path + file.getOriginalFilename()));
+			}
+		
+		bs.addBoard(new BoardVO(user_id,user_num,0,lang, title, contents, file.getOriginalFilename())); //게시물이 등록됨
+		return "board/mainBoard"; //전체게시판으로 이동
+	}
+```	
 4) write.jsp
-
-
+- 게시판 카테고리명, 제목, 이미지, 내용, 회원번호, 회원아이디를 form을 통해 writerAfter Controller로 보냄
+```	    
+	    <form action="writeAfter" method = "post" enctype="multipart/form-data">
+	        	<div class="form-group">
+				  <select name="lang">
+				  <option value="java">java</option>
+				  <option value="javascript">javascript</option>
+				  <option value="spring">spring</option>
+				  <option value="html">html</option>
+				  </select>
+			</div>
+			<div class="form-group">
+				 <label for="usr">제목:</label>
+				 <input type="text" class="form-control" id="title" name = "title">
+			</div>
+			<div class="form-group">
+		   
+			      <input type="file" class="form-control-file border" id="img" name="file" multiple="multiple"><br>
+			    
+			</div>
+			    <div class="form-group">
+				  <label for="comment">내용:</label>
+				  <textarea class="caption" required="required" name="contents" onkeydown="resize(this)" onkeyup="resize(this)"></textarea>
+			    </div>
+				<input type="hidden" name="user_id" value="${principal.user.username}">
+				<input type="hidden" name="user_num" value="${principal.user.id}">
+			    <button type="submit" class="btn btn-info">발행</button>
+		</form>
+```
 4.3.2 게시물 조회
 1) BoardDAO.java
+```
+	public List<BoardVO> getAllBoard();
+```
 2) BoardService.java
+```	
+	public List<BoardVO> getAllBoard(){
+		return bdao.getAllBoard();
+	}
+```	
 3) BoardController1.java
-4) LoginBoardView.jsp
+```
+@GetMapping("/boardList")
+@ResponseBody public List<BoardVO> boardList(){ 
+ 	return bs.getAllBoard(); //전체 게시판 모두 조회 
+
+}
+```
+4) detailView.jsp
 5) board/mainBoard.jsp
-6) board/html.jsp
-7) board/java.jsp
-8) board/javascript.jsp
-9) board/spring.jsp
+- ajax를 이용하여 boardList를 받아 게시판 전체 조회 후 섬네일로 표시된 게시물을 클릭하면 다음과 같은 글 정보들이 /detailView 로 넘어감	
+```
+<script>
+
+$(document).ready(function() {
+    $.ajax({
+    	
+    	url: "boardList", 
+    	success: function(result){         
+        var html = "<div id='grid' >";
+       
+       result.forEach(function(item){
+    
+    	   html+= "<div class='image1'><a href = 'detailView?contents=" + item.contents + 
+        				'&image=' + item.image + 
+        				'&title=' + item.title +
+        				'&user_id=${principal.user.username}' +
+        				'&writer=' + item.user_id +
+        				'&user_num=' + item.user_num +
+        				'&num=' + item.num +
+        				'&reply_cnt=' + item.reply_cnt +
+        				'&hit=' + item.hit +
+        				'&date1=' + item.date1 +
+        				'&lang=' + item.lang + "'>" + "<img id='hov1' src='/upload/" + item.image + "' width='200'  height='200'></a><h6 id='date1'>작성일: " + item.date1 
+        						+ '<br><img src="../images/click.png">' + item.hit + ' 댓글수:' + item.reply_cnt + "</h6></div>";
+       })    
+       $("#listArea").append(html);
+     }});
+} ); 
+
+</script>
+</head>
+<body>
+			
+					<tbody id="listArea" style="width: 50%">
+					</tbody>
+```					
+6) board/html.jsp (java,javascript, spring 게시판도 동일)
 
 4.3.3 게시물 수정
 1) BoardDAO.java
