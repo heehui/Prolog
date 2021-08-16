@@ -387,7 +387,7 @@ public class BoardController1 {
 - ajax를 통해 Controller에 boardList 로 요청을 보내면
 컨트롤러 -> mapper 인터페이스 -> mapper.xml에서 쿼리를 실행해 이 값을 현재 mainBoard.jsp의 result에 데이터 값을 가지고 오게 된다.
 - forEach문과 grid CSS를 적용하여 html을 생성해 tbody 부분에 섬네일 형식으로 append 시켜준다. (섬네일에 나타나는 것: 이미지, 작성일, 조회수) 
-- 그리고 각 섬네일을 클릭하면, 그에 맞는 게시물 정보를 컨트롤러 detailView 로 보내 detailView.jsp가 실행되도록 한다.
+- 그리고 각 섬네일을 클릭하면, 그에 맞는 게시물 정보를 BoardController1의 detailView 로 보내 detailView.jsp가 실행되도록 한다.
 	
 ```
 <script>
@@ -432,7 +432,7 @@ $(document).ready(function() {
 ```
 
 3) BoardService.java
-- Service에서는 MyBatis의 getAllBoard로 실행시킨 데이터를 List에 담아서 컨트롤러로 보낸다.
+- Service에서는 MyBatis의 getAllBoard로 실행시킨 데이터를 List에 담아서 BoardController1로 보낸다.
 ```	
 	public List<BoardVO> getAllBoard(){
 		return bdao.getAllBoard();
@@ -643,7 +643,7 @@ $(document).ready(function() {
 	public List<BoardVO> getMenu(String lang);
 ```
 3) BoardService.java
-- Service에서는 MyBatis의 getMenu로 실행시킨 데이터를 List에 담아서 컨트롤러로 보낸다.
+- Service에서는 MyBatis의 getMenu로 실행시킨 데이터를 List에 담아서 BoardController1로 보낸다.
 ```	
 	public List<BoardVO> getMenu(String lang){
 		return bdao.getMenu(lang);
@@ -800,7 +800,7 @@ public String html(@RequestParam("lang")String lang,
 public int updateclear(int num,String lang,String title,String image, String contents);
 ```
 3) BoardService.java
-- Service에서는 MyBatis의 updateclear를 실행시킨 후 데이터를 컨트롤러로 보낸다.
+- Service에서는 MyBatis의 updateclear를 실행시킨 후 데이터를 BoardController1로 보낸다.
 ```
 public int updateclear(int num, String lang,String title,String image, String contents) {
 	return bdao.updateclear(num, lang, title, image,contents);
@@ -823,7 +823,9 @@ public int updateclear(int num, String lang,String title,String image, String co
 ```
 5) BoardController1.java
 - updateView.jsp에서 게시물을 수정하고[수정완료]를 누르면 Controller의 updateclear로 이동한다.
-- db에 저장된 게시물 내용을 개행 처리해주고,   
+- 게시물 내용은 개행도 db에 저장될 수 있도록 replace를 이용하여 enter(즉, \r\n)를 <br> 태그로 업데이트가 되도록 한다.
+- bs.getBoardOne(num)는 글번호를 조건문으로 게시물 값을 조회하는 메서드이다.
+- view.jsp에서 수정된 게시물의 값들을 조회해야 하기 때문에 게시물의 내용을 다시 replace를 통해 \r\n로 변경하여 출력되도록 한다.
 ```
   @GetMapping("/updateclear")//수정완료가 되면
   public String updateclear( @RequestParam("num")int num,
@@ -856,37 +858,11 @@ public int updateclear(int num, String lang,String title,String image, String co
 			
 	return "view"; //이 화면에서 수정된 화면을 바로 보여줌
  }
-```
-	
-2) BoardDAO.java
-- 글번호, 카테고리명, 제목, 이미지, 내용 값을 매개변수로 하는 mapper 메소드를 생성한다.
-```
-public int updateclear(int num,String lang,String title,String image, String contents);
-```
-3) BoardService.java
-- Service에서는 MyBatis의 updateclear를 실행시킨 후 데이터를 컨트롤러로 보낸다.
-```
-public int updateclear(int num, String lang,String title,String image, String contents) {
-	return bdao.updateclear(num, lang, title, image,contents);
-}	
-```
-4) mybatismapper.xml
-- 글번호(num)을 조건문으로 하여 해당 게시물의 카테고리명, 제목, 이미지, 내용을 수정된다.
-- 작성일은 NOW()를 통해 수정한 날짜로 업데이트 되도록 한다.
-```
-<update id="updateclear" parameterType="com.cos.prologstart.vo.BoardVO">
-	UPDATE boardTable2
-        SET 
-        	lang = #{lang},
-        	title = #{title},
-        	image = #{image},
-            	contents = #{contents},
-            	date1 = NOW()
-        WHERE num = #{num}
-</update>
-```
+```	
+
 6) view.jsp
 - [수정완료]를 누르면 해당 페이지로 이동한다.
+- 수정된 내용으로 페이지에 값이 나타난다.
 ```
 <%@ include file="../views/layout/header2.jsp"%>
 <div id="container">
@@ -922,16 +898,152 @@ public int updateclear(int num, String lang,String title,String image, String co
 ```
 4.3.4 게시물 삭제
 1) BoardDAO.java
+- 글번호를 매개변수로 하는 mapper 메소드를 생성한다.
+```
+public int deleteBoard(int num);
+```
 2) BoardService.java
-3) BoardController1.java
-
-4.3.5 마이페이지
+- Service에서는 MyBatis의 deleteBoard로 실행시킨 데이터를 BoardController1로 보낸다.
+```
+public int deleteBoard(int num) {
+	return bdao.deleteBoard(num);
+}
+```
+3)mybatismapper.xml
+```
+<delete id="deleteBoard" parameterType="com.cos.prologstart.vo.BoardVO">
+	DELETE 
+	FROM 
+		boardTable2
+        WHERE 
+		num = #{num}
+</delete>
+```		 
+4) BoardController1.java
+- detailView.jsp에서 해당 게시물의 작성자와 로그인 회원이 동일하다면, [삭제] 버튼이 보이고 [삭제]를 누르면 글번호를 통해 해당 게시물과, 댓글들이 모두 삭제된다.
+```
+ @GetMapping("/delete")//게시글 삭제
+ public String delete(@RequestParam("num")int num) throws Exception {
+	bs.deleteBoard(num); //글번호로 게시글 삭제
+	bs.deleteAllReply(num); //삭제한 게시글에 있는 댓글도 삭제
+	return "board/mainBoard";
+}
+```
+4.3.5 프로필페이지
 1) BoardDAO.java
+- session에 저장된 회원아이디를 매개변수로 하는 mapper 메소드를 생성한다.
+```
+public List<BoardVO> goMypage(String user_id);
+```
 2) BoardService.java
-3) BoardController1.java 
-4) profile.jsp
+- Service에서는 MyBatis의 goMypage로 실행시킨 데이터를 UserController로 보낸다.
+```
+public List<BoardVO> goMypage(String user_id){
+	return bdao.goMypage(user_id);
+}
+```
+3)mybatismapper.xml
+```
+<select id="goMypage" resultType="com.cos.prologstart.vo.BoardVO">
+	SELECT
+		user_id, user_num, num, lang, title, contents, image, DATE_FORMAT(date1, '%Y-%m-%d %T') as 'date1', hit, reply_cnt
+	FROM
+		boardTable2
+	WHERE
+		user_id = #{user_id}
+</select>
+```
+4) UserController.java
+- 로그인한 상태에서 layout/header.jsp의 [PROFILE]을 누르면 로그인한 회원의 프로필페이지가 나타난다.
+- 로그인한 회원이 작성했던 게시물을 섬네일 형태로 볼 수 있다.
+- 내가 작성한 댓글보기를 누르면 로그인한 회원이 작성했던 댓글을 하번에 모아볼 수 있는 replyList.jsp 로 이동하게 된다.
+```
+@RequiredArgsConstructor
+@Controller
+public class UserController {
+	
+	private final UserService userService;
+	
+	@Autowired
+	private BoardService1 bs;
+	
+	@GetMapping("/{pageUserId}")					
+	public String profile(@PathVariable int pageUserId, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails,
+			 HttpServletRequest req,  HttpSession session) {
+		UserProfileDto dto = userService.회원프로필(pageUserId, principalDetails.getUser().getId());
 
 
+		String user_id = req.getParameter("user_id");
+		session.setAttribute("user_id", user_id);
+
+		model.addAttribute("menu", bs.goMypage(user_id)); //해당 user_id를 가진 게시글을 모두 조회
+
+		model.addAttribute("dto", dto);
+		return "profile";
+	}
+```
+5) profile.jsp
+- 
+- 내가 작성한 글 개수는 fn 태그라이브러리를 이용하여 menu로 받아온 List 개수를 이용한다.
+- 새 글 등록 : 게시판에서 글을 작성한 방식과 동일하게 BoardController1의 write로 이동하여 글을 작성할 수 있다.
+- 내가 작성한 댓글 보기
+- 게시판에서 상세페이지로 게시물을 보는 것과 동일한 형태로 프로필페이지의 글도 읽을 수 있다.
+```
+<div class="name-group">
+           <h2>${dto.user.username}<br>(${dto.user.name})</h2>
+
+                <c:choose>
+                    <c:when test="${dto.pageOwnerState}">
+                        <button class="cta" onclick="location.href='write'">새 글 등록</button>
+                        <button class="cta" onclick="location.href='myReplyList?user_id=${principal.user.username}'">내가 작성한 댓글 보기</button>
+                    </c:when>
+                    
+                </c:choose>
+			<div class="subscribe">
+				<ul>
+					<li><a href=""> 게시물<span>${fn:length(menu)}</span>
+					</a></li>
+					<li><a href="javascript:subscribeInfoModalOpen(${dto.user.id});"> 구독정보<span>${dto.subscribeCount}</span>
+					</a></li>
+				</ul>
+			</div>
+			<div class="state">
+				<h4>${dto.user.bio}</h4>
+				<h4>${dto.user.website}</h4>
+			</div>
+		</div>
+		<!--유저정보 및 사진등록 구독하기-->
+	</div>
+</section>
+
+ 	<div class="row">					
+			<h2>
+			<c:choose>
+				<c:when test="${dto.pageOwnerState}">내가 작성한 글 
+				</c:when>
+				<c:otherwise>
+					${dto.user.username}님이 작성한 글
+				</c:otherwise>
+			</c:choose> </h2>
+	<table align="center">
+	<tbody style="width: 50%">
+		<div id="grid">
+		<c:forEach var="menu" items="${menu}"> 
+		       <div class='image1'><a href = 'detailView?contents=${menu.contents}&image=${menu.image}&title=${menu.title}&lang=${menu.lang}
+			&num=${menu.num}&date1=${menu.date1}&user_id=${principal.user.username}&writer=${principal.user.username}&hit=${menu.hit}&user_num=${menu.user_num}'>
+			<img src='/upload/${menu.image}' width="200" height="200"></a><h6 id='date1'>작성일: ${menu.date1}</h6></div>
+		</c:forEach>			
+	</tbody>
+		 </div>
+			<td><button type="button" class="btn btn-info" id="btnUpdate" onclick="history.go(-1)">뒤로가기</button></td>
+			<td><button type="button" class="btn btn-info" id="btnUpdate" onclick="location.href='board'" style="float:right;">목록</button></td>
+			</table>			
+	</div>
+		</div>
+			</div>
+</section>
+
+```
 4.4 댓글 기능
 - ReplyVO.java
 ```
@@ -947,17 +1059,336 @@ public class ReplyVO {
 
 4.4.1 댓글 작성
 1) BoardDAO.java
+- detailView.jsp 하단의 댓글창에 댓글을 작성하면 해당 게시물 글번호(num), 로그인하여 댓글을 작성한 회원아이디(writer), 댓글 내용(content)을 매개변수로 하는 mapper 메소드를 생성한다.
+```
+public boolean writeReply(int num, String writer,String content)throws Exception;
+```
 2) BoardService.java
-3) BoardController1.java
-4) write.jsp
-4.4.2 댓글 조회
-4.4.3 댓글 수정
-4.4.4 댓글 삭제
+- Service에서는 MyBatis의 writeReply로 실행시킨 데이터를 BoardController1로 보낸다.
+```
+public boolean writeReply(int num,String writer,String content)throws Exception{
+	return bdao.writeReply(num, writer,content);
+}
+```
+3)mybatismapper.xml
+- 댓글번호는 쿼리문에서 자동 수 증사 처리를 해주었기 때문에 insert에서 생략한다.
+```
+<insert id="writeReply">
+	INSERT INTO 
+		replyTable(num,content,writer)   
+	VALUES(
+	   	#{num},
+	   	#{content},
+	   	#{writer}
+	)
+</insert>
+```
+4) BoardController1.java
+- 
+```
+@GetMapping("/writeReply") 
+public String replyWrite(@RequestParam("num")int num,
+	  		 @RequestParam("writer")String writer,
+			 @RequestParam("content")String content,
+			 Model model1) throws Exception {
+	
+	bs.writeReply(num,writer,content); //댓글번호, 작성자, 댓글내용 insert
+				
+	return "board/mainBoard";
+}
+```	
 
+4.4.2 댓글 조회
+1) detailView.jsp 하단의 댓글창
+- 
+```
+ <div id="reply">
+            <div align="left">(${fn:length(reList)})개의 댓글</div>
+               <c:choose>
+                  <c:when
+                     test="${empty principal.user.username || principal.user.username == '비회원'}">
+                  </c:when>
+                  
+                  <c:otherwise>
+                     <section class="replyForm" align="left">
+                        <form action="writeReply" method="get">
+                           <p>
+                              <textarea id="content" name="content" rows="5" cols="100"
+                                 placeholder="댓글을 입력해주세요"></textarea>
+                           </p>
+                           <input type="hidden" name="writer" value="${user_id}">
+                           <input type="hidden" name="num" value="${num}">
+                          <div style='width:150px; float: right;'>
+ 			   <input type="submit" class="btn btn-info btn-sm" value="작성" >
+			  </div>
+                        </form>
+                     </section>
+                  </c:otherwise>
+               </c:choose>
+               
+               <c:forEach items="${reList}" var="list" varStatus="status">
+               <pre>
+     		<b style="text-align: left">${list.writer}</b> 님     
+    		 <h7 style="color: gray; text-align: right">작성일: ${list.regDate}</h7> </pre>
+                  <c:choose>
+                     <c:when test="${list.writer == user_id || user_id == 'admin_user' }">
+                        <div align="left"><textarea class="newContent" id="content" name="content" rows="5" cols="100"
+                           style="border: none; background-color: #F1FFFE;">${list.content}</textarea></div>
+                        <input type="hidden" id="reply_num" value="${list.reply_num}"><br>
+                        <input type="button" class="btn btn-info btn-sm" id="update1" style="float:right;" value="수정">
+                        <a href="deleteReply?reply_num=${list.reply_num}"><input type="button" class="btn btn-info btn-sm" id="del" style="float:right;" value="삭제"></a>
+                        <br><br>
+                     </c:when>
+                     <c:otherwise>
+                        <textarea id="content" name="content" rows="5" cols="100" readonly="readonly"
+                           style="border: none; background-color: #F1FFFE">${list.content}</textarea>
+                     </c:otherwise>
+                  </c:choose>
+               </c:forEach>
+         </table>
+      </div>
+   </div>
+</div><br><br>
+	
+      <%@ include file="../views/layout/footer.jsp"%>
+```
+4.4.3 댓글 수정
+1) BoardDAO.java
+- 댓글번호, 댓글 내용을 매개변수로 하는 mapper 메소드를 생성한다.
+```
+public int updateReply(int reply_num, String content)throws Exception;
+```
+2) BoardService.java
+- Service에서는 MyBatis의 updateReply로 실행시킨 데이터를 BoardController1 으로 보낸다.
+```
+public int updateReply(int reply_num, String content)throws Exception{
+	return bdao.updateReply(reply_num, content);
+}
+```
+3)mybatismapper.xml
+```
+ <update id="updateReply" parameterType="com.cos.prologstart.vo.ReplyVO">
+	UPDATE 
+		replyTable
+        SET 
+        	content = #{content},
+        	regDate = NOW()
+       
+        WHERE 
+	 	reply_num = #{reply_num}
+</update>
+```		 
+4) BoardController1.java
+- 
+```
+@GetMapping("/updateReply")
+public String updateReply(@RequestParam("reply_num")int reply_num,
+			  @RequestParam("content")String content,
+			  Model model1) throws Exception {
+	
+	bs.updateReply(reply_num, content); //댓글 내용 수정
+			
+	return "board/mainBoard";
+			
+}
+```	 
+4.4.4 댓글 삭제(개별 삭제, 전체 삭제)
+1) BoardDAO.java
+- 개별 삭제
+```
+public int deleteReply(int reply_num)throws Exception;
+```
+- 전체 삭제
+```
+public int deleteAllReply(int num)throws Exception;
+```
+2) BoardService.java
+- Service에서는 MyBatis의 deleteReply로 실행시킨 데이터를 BoardController1 으로 보낸다.
+- 개별 삭제
+```
+public int deleteReply(int reply_num)throws Exception{
+	return bdao.deleteReply(reply_num);
+}
+```
+- 전체 삭제
+```
+public int deleteAllReply(int num)throws Exception{
+	return bdao.deleteAllReply(num);
+}
+```
+3)mybatismapper.xml
+- 개별 삭제
+```
+ <delete id="deleteReply" parameterType="com.cos.prologstart.vo.ReplyVO">
+	DELETE 
+	FROM 
+	 	replyTable
+        WHERE 
+	 	reply_num = #{reply_num}
+</delete>
+```
+- 전체 삭제
+```
+<delete id="deleteAllReply" parameterType="com.cos.prologstart.vo.ReplyVO">
+	DELETE 
+	FROM 
+		replyTable
+        WHERE 
+		num = #{num}
+</delete>
+```
+4) BoardController1.java
+- 
+```
+@GetMapping("/deleteReply")
+public String deleteReply(@RequestParam("reply_num")int reply_num,
+			  Model model1) throws Exception {
+	
+	bs.deleteReply(reply_num);//해당 댓글 번호를 가져와서 댓글 삭제
+		
+	return "board/mainBoard";
+}
+		
+```
+- 전체 삭제는 해당 게시물을 삭제했을 때, 그 게시물의 글번호에 작성된 댓글들도 모두 삭제되도록 한다.
+```
+@GetMapping("/delete")
+public String delete(@RequestParam("num")int num) throws Exception {
+	bs.deleteBoard(num); //글번호로 게시글 삭제
+        bs.deleteAllReply(num); //삭제한 게시글에 있는 댓글도 삭제
+	return "board/mainBoard";
+ }
+```
 4.5 관리자 기능
+- 로그인 페이지에서 admin_user의 아이디로 로그인하면 메인페이지에 관리자페이지 버튼이 생성된다.
+- [관리자페이지]를 누르면 관리자 메인페이지로 이동하게 된다.
+- 관리자 메인페이지에 [회원게시판],[회원강제 탈퇴],[공지사항] 3개의 버튼이 나타난다.
+	     
 4.5.1 전체 회원 정보 조회
+- [회원강제탈퇴]를 누르면, 회원 전체 정보 조회와 회원 아이디를 누르면 하이퍼링크로 해당 회원이 작성한 글을 프로필 페이지 형태로 조회할 수 있다.
+1)BoardDAO.java
+```
+public ArrayList<UserUpdateDto> getAllUser();
+```
+2)BoardService1.java
+```
+public ArrayList<UserUpdateDto> getAllUser(){
+	return bdao.getAllUser();
+}
+```
+3)mybatismapper.xml
+```
+<select id="getAllUser" resultType="com.cos.prologstart.domain.user.User">
+	SELECT 
+		*	
+	FROM  
+		user   
+</select>
+```
+4)BoardController1
+- 관리자 화면에서 회원강제탈퇴를 누르면, 전체 회원정보를 보여줌
+```
+@GetMapping("/userList")
+public String userList(Model model1) {
+	 model1.addAttribute("getAllUser", bs.getAllUser()); 
+	 return "admin/userList";
+ }
+```
+5)admin/userList.jsp
+```
+<%@ include file="../admin/header.jsp"%>
+<body>
+
+	<table border="1" align="center" class="table" style="margin-top:50px;"> 
+	<caption>회원목록</caption>
+	<tr><td colspan="2" align="left"><b>회원수(${fn:length(getAllUser)})</b></td> 
+	<tr>
+		<th><b>No.</b></th>
+		<th><b>회원 아이디</b></th>
+		<th><b>이름</b></th>
+		<th><b>회원번호</b></th>
+		<th><b>이메일</b></th>
+		<th><b>사진</b></th>
+		<th><b>가입일</b></th>
+		<th><b>권한</b></th>
+		<th><b>선택</b></th></tr>
+
+	 	<c:forEach var="imsi" items="${getAllUser}" varStatus="status" >
+	 	<tr align="center">
+		<td>${status.count}</td>
+	 	<td id="username"><a href="/${imsi.id}?user_id=${imsi.username}" >${imsi.username}</a></td>
+	 	<td>${imsi.name}</td>
+	 	<td>${imsi.id}</td>
+	 	<td>${imsi.email}</td>
+		<td>${imsi.profileImageUrl}</td>
+		<td>${fn:substring(imsi.createDate, 0, 10)}</td>
+```	 	
+	 	
 4.5.2  회원 강제 탈퇴
+- 위의 내용에 이어서, 회원들이 작성한 게시물을 조회한다.
+1)admin/userList.jsp
+```
+		<td>
+	 	<c:choose>
+	 		<c:when test="${imsi.username != 'admin_user'}">
+	 		${imsi.role}</td>
+	 		  <td><a href="deleteMember?username=${imsi.username}" id="del1"><button type="button" class="btn btn-primary" id="btnout1">강제탈퇴</button></a></td>
+	 		</c:when>
+	 	</c:choose>
+		</tr>
+		</c:forEach>
+		<td colspan="11">
+			<button type="button" class="btn btn-primary" id="back" onclick="history.go(-1)">뒤로가기</button>
+			<button type="button" class="btn btn-primary" id="list" onclick="location.href='adminMain'">관리자 메인창</button><br><br>
+		</td>
+	</table>
+<%@ include file="../layout/footer.jsp"%>
+</body>
+</html>	      
+```	      
 4.5.3  공지사항 작성
+- 관리자 메인페이지에서 [공지사항]을 누르면 notice.jsp로 이동하며 공지사항 작성 권한이 주어진다.
+- 회원들은 작성할 수 없었던 notice 카테고리를 선택하여 글을 작성할 수 있다.
+1) notice.jsp
+```	
+<%@ include file="../layout/header2.jsp"%>
+<h1>공지사항(notice)</h1>
+<hr>
+ 	<c:choose>
+ 		<c:when test="${principal.user.username == 'admin_user'}"> <!-- 관리자가 로그인했을 경우, 공지사항 글작성 권한을 주기위해 -->
+ 			<div align="right"><a href="adminWrite?user_id=${principal.user.username}"><button type="button" class="btn btn-info" id="writeBtn">
+				<img src="../images/pencil.png" width="30"></button></a></div>
+		</c:when>
+	</c:choose>	
+	<table align="center">
+		<tbody style="width: 50%">
+		 <div id="grid">
+		   <c:choose>
+			<c:when test="${principal.user.username == null}">
+			
+			<c:forEach var="imsi" items="${menu}"> 
+		        	<div class='image1'><a href = 'detailView?contents=${imsi.contents}&image=${imsi.image}&title=${imsi.title}&lang=${imsi.lang}
+					&num=${imsi.num}&date1=${imsi.date1}&writer=${imsi.user_id}&hit=${imsi.hit}&user_num=${imsi.user_num}'>
+				<img id='hov1' src='/upload/${imsi.image}' width="200" height="200"></a><h6 id='date1'>작성일: ${imsi.date1}<br>조회수: ${imsi.hit}</h6></div>
+			</c:forEach>
+			</c:when>
+			<c:otherwise>
+				<c:forEach var="imsi" items="${menu}"> 		
+					<div class='image1'><a href = 'detailView?contents=${imsi.contents}&image=${imsi.image}&title=${imsi.title}&lang=${imsi.lang}
+					&num=${imsi.num}&date1=${imsi.date1}&user_id=${principal.user.username}&writer=${imsi.user_id}&hit=${imsi.hit}&user_num=${imsi.user_num}'>
+				<img src='/upload/${imsi.image}' width="200" height="200"></a><h6 id='date1'>작성일: ${imsi.date1}<br>조회수: ${imsi.hit}</h6></div>
+				</c:forEach>
+			</c:otherwise>
+		   </c:choose>		
+		</tbody>
+		</div>
+			 <button type="button" class="btn btn-info" id="btnUpdate" onclick="history.go(-1)">뒤로가기</button>	
+		</table>		
+	</div>
+		</div>
+			</div>
+<%@ include file="../layout/footer.jsp"%>
+```	
 4.5.4  모든 게시물, 댓글 접근 권한(수정, 삭제 권한)
 
 
