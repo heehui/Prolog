@@ -1,54 +1,51 @@
 
-### spring boot와 Mybatis, JPA, MariaDB로 만든 '공유블로그 Prolog' 입니다. (수정중 입니다!!)
-#### 로그인 및 회원가입, 게시판, 댓글 기능, 관리자 기능이 포함되어있습니다.
-###### - 제가 맡은 게시판, 댓글, 관리자 기능 파트에 대해 작성했습니다. 
+# Spring boot와 Mybatis, JPA, MariaDB로 만든 '공유블로그 Prolog'
+#### - 제가 맡은 게시판, 댓글, 관리자 기능 파트에 대해 작성했습니다. 
 ---
-1. 프로젝트 개요 
-###### - 공통 관심사를 가진 사람들이 모여 정보를 나누는 것이 보편화된 시대에 맞게 프로그래밍에 관심을 가진 사람들이 모여 정보를 공유할 수 있는 공간이다.
-###### - 회원 가입을 한 후 로그인을 통해 카테고리 별 게시물을 작성할 수 있다. 
-###### - 다른 회원들의 게시물도 공유할 수 있으며, 댓글을 통해 서로 간의 소통도 가능한 블로그이다.
-###### - 관리자 모드로 로그인하면 공지사항 작성, 게시판 관리 등의 권한을 가지게 되며, 원활한 운영을 할 수 있다
+## 1. 프로젝트 개요 
+- 공통 관심사를 가진 사람들이 모여 정보를 나누는 것이 보편화된 시대에 맞게 프로그래밍에 관심을 가진 사람들이 모여 정보를 공유할 수 있는 공간이다.
+- 회원 가입을 한 후 로그인을 통해 카테고리 별 게시물을 작성할 수 있다. 
+- 다른 회원들의 게시물도 공유할 수 있으며, 댓글을 통해 서로 간의 소통도 가능한 블로그이다.
+- 관리자 모드로 로그인하면 공지사항 작성, 게시판 관리 등의 권한을 가지게 되며, 원활한 운영을 할 수 있다
 
-#
 
-2. 프로젝트 개발의 목적
-- ###### Spring boot와 HTML, CSS, JSP 등을 사용하여 시스템을 개발하고, DB연동을 활용한다.
-- ###### 커뮤니티 블로그를 구현하여 프로그래밍이라는 분야에 관심을 가진 사람들이 모여 정보를 공유할 수 있도록 한다. 
-- ###### 프로그래밍 언어 별로 카테고리를 나눠 게시 글을 작성, 댓글 작성 등을 통해 회원 간의 소통이 가능하도록 한다.
+## 2. 프로젝트 개발의 목적
+- Spring boot와 HTML, CSS, JSP 등을 사용하여 시스템을 개발하고, DB연동을 활용한다.
+- 커뮤니티 블로그를 구현하여 프로그래밍이라는 분야에 관심을 가진 사람들이 모여 정보를 공유할 수 있도록 한다. 
+- 프로그래밍 언어 별로 카테고리를 나눠 게시 글을 작성, 댓글 작성 등을 통해 회원 간의 소통이 가능하도록 한다.
 
-#
 
-3. 프로젝트 상세 내용
- ###### 1) 로그인/회원 가입
-- ###### 로그인: 가입 시 입력한 USERNAME 과 PASSWORD 입력하여 로그인이 가능하다.
-- ###### 페이스북 로그인 : 페이스북의 정보를 입력하여 페이스북 정보로 로그인이 가능하다.
-- ###### 회원 가입 : USERNAME, PASSWORD, NAME, EMAIL 등 회원 정보를 입력하여 회원 가입이 가능하다.
+## 3. 프로젝트 상세 내용
+ ### 1) 로그인/회원 가입
+- 로그인: 가입 시 입력한 USERNAME 과 PASSWORD 입력하여 로그인이 가능하다.
+- 페이스북 로그인 : 페이스북의 정보를 입력하여 페이스북 정보로 로그인이 가능하다.
+- 회원 가입 : USERNAME, PASSWORD, NAME, EMAIL 등 회원 정보를 입력하여 회원 가입이 가능하다.
 
- ###### 2) 메인 페이지
-- ###### header: 우측의 세 개 아이콘을 클릭 시 [HOME], [BOARD], [PROFILE] 페이지로 이동이 가능하다.
-- ###### body : 전체 게시판으로 이동 할 수 있는 메뉴가 있다.
-- ###### footer
+ ### 2) 메인 페이지
+- header: 우측의 세 개 아이콘을 클릭 시 [HOME], [BOARD], [PROFILE] 페이지로 이동이 가능하다.
+- body : 전체 게시판으로 이동 할 수 있는 메뉴가 있다.
+- footer
 
-###### 3) 프로필 페이지
-- ###### 유저가 지정해 놓은 프로필 이미지가 나타난다.
-- ###### USERNAME과 본인 소개 글이 보인다.
-- ###### 프로필 페이지의 유저가 작성한 글들이 나타난다.
-- ###### 작성 글을 클릭하면 게시 글의 내용을 확인 할 수 있다.
-- ###### 본인의 프로필 페이지에서는 글 작성 버튼과 회원 정보를 수정, 로그아웃을 위한 톱니바퀴 버튼이 보인다.
+ ### 3) 프로필 페이지
+- 유저가 지정해 놓은 프로필 이미지가 나타난다.
+- USERNAME과 본인 소개 글이 보인다.
+- 프로필 페이지의 유저가 작성한 글들이 나타난다.
+- 작성 글을 클릭하면 게시 글의 내용을 확인 할 수 있다.
+- 본인의 프로필 페이지에서는 글 작성 버튼과 회원 정보를 수정, 로그아웃을 위한 톱니바퀴 버튼이 보인다.
 
-###### 4) 회원 정보 수정
-- ###### 가입 시 기입한 USERNAME은 변경할 수 없다.
-- ###### 회원 정보 수정 시 비밀번호는 반드시 입력해야 한다.
-- ###### 수정 된 정보는 프로필 페이지에 반영된다.
+ ### 4) 회원 정보 수정
+- 가입 시 기입한 USERNAME은 변경할 수 없다.
+- 회원 정보 수정 시 비밀번호는 반드시 입력해야 한다.
+- 수정 된 정보는 프로필 페이지에 반영된다.
 
-###### 5) 게시판
-- ###### 언어 별로 카테고리가 구분되어 있다.
-- ###### 카테고리 별로 작성 된 게시물을 볼 수 있다.
-- ###### 게시물을 클릭하면 작성 된 내용을 확인할 수 있고, 댓글 작성이 가능하다.
+ ### 5) 게시판
+- 언어 별로 카테고리가 구분되어 있다.
+- 카테고리 별로 작성 된 게시물을 볼 수 있다.
+- 게시물을 클릭하면 작성 된 내용을 확인할 수 있고, 댓글 작성이 가능하다.
 
-###### 6) 관리자 모드
-- ###### 관리자 모드로 로그인을 하면 공지사항을 작성 할 수 있다.
-- ###### 회원 탈퇴 등의 회원 관리가 가능하다.
+ ### 6) 관리자 모드
+- 관리자 모드로 로그인을 하면 공지사항을 작성 할 수 있다.
+- 회원 탈퇴 등의 회원 관리가 가능하다.
 
 #
 
@@ -58,32 +55,32 @@
 
 ![1조_발표동영상_Trim](https://user-images.githubusercontent.com/78891624/129296817-5ca25c2e-6e71-43b6-ac79-b18ffe2ade79.gif)
 
-4. 프로젝트 설명
+## 4. 프로젝트 설명
 
-###### 4.1 DB 쿼리문
+### 4.1 DB 쿼리문
 - pro 권한 부여
 - 게시판 테이블(boardTable2)
 - 댓글 테이블(replyTable)
 
-###### 4.2 환경설정
+### 4.2 환경설정
 - pom.xml
 - application.yml(포트번호, jsp적용, MariaDB 연동)
 - application.properties (mybatisMapper.xml과 DAO 연결)
 
-###### 4.3 게시판 기능
+### 4.3 게시판 기능
 - 게시물 작성 및 등록
 - 게시물 조회
 - 게시물 수정
 - 게시물 삭제
-- 마이페이지
+- 마이페이지(내가 쓴 글, 내가 쓴 댓글 모음)
 
-###### 4.4 댓글 기능
+### 4.4 댓글 기능
 - 댓글 작성
 - 댓글 조회
 - 댓글 수정
 - 댓글 삭제
 
-###### 4.5 관리자 기능
+### 4.5 관리자 기능
 - 전체 회원 정보 조회
 - 회원 강제 탈퇴
 - 공지사항 작성
@@ -91,8 +88,7 @@
 
 #
 
-
-4.1 DB 테이블 쿼리문
+#### 4.1 DB 테이블 쿼리문
 
  - pro 권한 주기
 
@@ -107,11 +103,11 @@ create database prolog
 CREATE TABLE `boardtable2` (
 	`user_id` VARCHAR(50) NOT NULL COLLATE 'utf8mb3_general_ci', -- 로그인한 id
 	`num` INT(10) NOT NULL AUTO_INCREMENT, -- 글번호
-	`lang` VARCHAR(100) NOT NULL COLLATE 'utf8mb3_general_ci', -- 게시판 이름
-	`title` VARCHAR(200) NOT NULL COLLATE 'utf8mb3_general_ci', -- 게시글 제목
-	`contents` VARCHAR(1000) NOT NULL COLLATE 'utf8mb3_general_ci', -- 게시글 내용
-	`image` VARCHAR(200) NULL DEFAULT NULL COLLATE 'utf8mb3_general_ci', -- 첨부한 이미지
-	`date1` TIMESTAMP NULL DEFAULT current_timestamp(), -- 날짜
+	`lang` VARCHAR(100) NOT NULL COLLATE 'utf8mb3_general_ci', -- 게시판 명
+	`title` VARCHAR(200) NOT NULL COLLATE 'utf8mb3_general_ci', -- 게시물 제목
+	`contents` VARCHAR(1000) NOT NULL COLLATE 'utf8mb3_general_ci', -- 게시물 내용
+	`image` VARCHAR(200) NULL DEFAULT NULL COLLATE 'utf8mb3_general_ci', -- 첨부 이미지
+	`date1` TIMESTAMP NULL DEFAULT current_timestamp(), -- 작성일
 	`hit` INT(11) NULL DEFAULT '0', -- 조회수
 	INDEX `num` (`num`) USING BTREE,
 	INDEX `user_id` (`user_id`) USING BTREE
@@ -133,7 +129,7 @@ CREATE TABLE `replytable` (
 );
 ```
 
-4.2 환경설정
+#### 4.2 환경설정
 1) pom.xml
 - JSP 
 ```
@@ -225,7 +221,7 @@ mybatis.mapper-locations=classpath:mapper/**/**.xml
 ```
 
 
-4.3 게시판 기능
+#### 4.3 게시판 기능
 
 - BoardVO.java
 
@@ -243,7 +239,7 @@ public class BoardVO {
 }
 ```
 
-4.3.1 게시물 작성 및 등록
+##### 4.3.1 게시물 작성 및 등록
 1) BoardDAO.java
 ```
 @Mapper 
@@ -264,7 +260,40 @@ public class BoardService1 {
 		return bdao.addBoard(bvo);
 	}
 ```
-3) BoardController1.java
+3)  write.jsp
+- 게시판 카테고리명, 제목, 이미지, 내용, 회원번호, 회원아이디를 form을 통해 /writerAfter 로 보냄
+```	    
+	    <form action="writeAfter" method = "post" enctype="multipart/form-data">
+	        	<div class="form-group">
+				  <select name="lang">
+				  <option value="java">java</option>
+				  <option value="javascript">javascript</option>
+				  <option value="spring">spring</option>
+				  <option value="html">html</option>
+				  </select>
+			</div>
+			<div class="form-group">
+				 <label for="usr">제목:</label>
+				 <input type="text" class="form-control" id="title" name = "title">
+			</div>
+			<div class="form-group">
+		   
+			      <input type="file" class="form-control-file border" id="img" name="file" multiple="multiple"><br>
+			    
+			</div>
+			    <div class="form-group">
+				  <label for="comment">내용:</label>
+				  <textarea class="caption" required="required" name="contents" onkeydown="resize(this)" onkeyup="resize(this)"></textarea>
+			    </div>
+				<input type="hidden" name="user_id" value="${principal.user.username}"> //시큐리티 회원 username(=회원 아이디)
+				<input type="hidden" name="user_num" value="${principal.user.id}">  //시큐리티 회원 id(=회원 번호)
+			    <button type="submit" class="btn btn-info">발행</button>
+		</form>
+```
+4) BoardController1.java
+
+- 글 작성 버튼을 누르면 Controller의 /write로 와서 글쓰기 페이지가 나타남
+
 ```
 @Controller
 public class BoardController1 {
@@ -277,6 +306,14 @@ public class BoardController1 {
 		return "write"; 
 	}
 ```
+
+- 글쓰기 페이지에서 게시판 카테고리명, 제목, 이미지, 내용을 입력한 후 [발행]을 누르면 /writeAfter 로 오게됨
+(입력한 값들을 @RequestParam을 통해 파라미터로 가져오고, user_id(회원아이디)는 session에 저장해둔다)
+- 첨부 이미지를 db에 저장하기 위해, 이미지가 저장될 외부 경로 path를 지정하여 이미지파일의 이름을 가져옴
+- 게시물 내용은 개행도 db에 저장될 수 있도록 replace를 이용하여 enter(즉, \r\n)를 <br> 태그로 저장되도록 함
+- BoardService1에서 생성한 addBoard를 불러와 각 파라미터값들을 넣어 insert되도록 함
+
+
 ```
 @PostMapping("/writeAfter")  //글 작성 후 '발행'을 누르면 이곳으로 이동
 	public String writeAction(
@@ -306,38 +343,10 @@ public class BoardController1 {
 		return "board/mainBoard"; //전체게시판으로 이동
 	}
 ```	
-4) write.jsp
-- 게시판 카테고리명, 제목, 이미지, 내용, 회원번호, 회원아이디를 form을 통해 writerAfter Controller로 보냄
-```	    
-	    <form action="writeAfter" method = "post" enctype="multipart/form-data">
-	        	<div class="form-group">
-				  <select name="lang">
-				  <option value="java">java</option>
-				  <option value="javascript">javascript</option>
-				  <option value="spring">spring</option>
-				  <option value="html">html</option>
-				  </select>
-			</div>
-			<div class="form-group">
-				 <label for="usr">제목:</label>
-				 <input type="text" class="form-control" id="title" name = "title">
-			</div>
-			<div class="form-group">
-		   
-			      <input type="file" class="form-control-file border" id="img" name="file" multiple="multiple"><br>
-			    
-			</div>
-			    <div class="form-group">
-				  <label for="comment">내용:</label>
-				  <textarea class="caption" required="required" name="contents" onkeydown="resize(this)" onkeyup="resize(this)"></textarea>
-			    </div>
-				<input type="hidden" name="user_id" value="${principal.user.username}">
-				<input type="hidden" name="user_num" value="${principal.user.id}">
-			    <button type="submit" class="btn btn-info">발행</button>
-		</form>
-```
-4.3.2 게시물 조회
+
+##### 4.3.2 게시물 조회
 1) BoardDAO.java
+- BoardVO를 컬렉션(List)에 넣어 게시물 전체 조회를 할 수 있도록 함
 ```
 	public List<BoardVO> getAllBoard();
 ```
@@ -348,6 +357,7 @@ public class BoardController1 {
 	}
 ```	
 3) BoardController1.java
+- 
 ```
 @GetMapping("/boardList")
 @ResponseBody public List<BoardVO> boardList(){ 
@@ -358,6 +368,7 @@ public class BoardController1 {
 4) detailView.jsp
 5) board/mainBoard.jsp
 - ajax를 이용하여 boardList를 받아 게시판 전체 조회 후 섬네일로 표시된 게시물을 클릭하면 다음과 같은 글 정보들이 /detailView 로 넘어감	
+- ajax를 통해 Controller에 boardList으로 요청을 보내면 컨트롤러에서 매퍼 인터페이스 타고 xml에서 쿼리 실행해 결과적으로는 result에 데이터 값을 가지고 오게 됩니다. 그런 뒤 for문을 돌려  html을 생성해 tbody 부분에 append 시켜주는 방식을 사용하였습니다. 
 ```
 <script>
 
@@ -391,9 +402,10 @@ $(document).ready(function() {
 </head>
 <body>
 			
-					<tbody id="listArea" style="width: 50%">
-					</tbody>
-```					
+	<tbody id="listArea" style="width: 50%">
+	</tbody>
+```
+	
 6) board/html.jsp (java,javascript, spring 게시판도 동일)
 
 4.3.3 게시물 수정
