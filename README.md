@@ -357,7 +357,7 @@ public class BoardController1 {
 	}
 ```	
 3) BoardController1.java
-- 
+- Controller에서는 boardList로 받은 요청을 Service로 넘겨줍니다. 
 ```
 @GetMapping("/boardList")
 @ResponseBody public List<BoardVO> boardList(){ 
