@@ -56,7 +56,9 @@
 
 #
 
-![1조_발표동영상_Trim](https://user-images.githubusercontent.com/78891624/129296817-5ca25c2e-6e71-43b6-ac79-b18ffe2ade79.gif)
+
+![1-게시판섬네일](https://user-images.githubusercontent.com/78891624/129730534-ae8e69c3-be42-4d54-8ef5-3b3f69406644.gif)
+
 
 ## 4. 프로젝트 설명
 
@@ -266,6 +268,8 @@ public class BoardVO {
 - 회원은 공지사항을 제외하고 모든 게시물을 작성할 권한을 가지고 있다.
 - 게시판 화면에서 오른쪽에 연필모양 버튼을 눌러 게시물을 작성할 수 있다.
 
+![2-게시물등록](https://user-images.githubusercontent.com/78891624/129730501-6916532f-59a4-4c89-a73c-f3647a002f31.gif)
+
 1)  write.jsp
 - 게시판 카테고리명, 제목, 이미지, 내용, 회원번호, 회원아이디를 <form>의 post방식을 통해 BoardController1의 writerAfter 로 보낸다.
 ```	    
@@ -402,6 +406,10 @@ public String writeAction(
 - 각 게시물을 클릭하면 그에 맞는 상세페이지로 이동한다.
 - 게시물 작성자의 회원아이디와 로그인한 회원아이디가 같으면 게시물을 수정 및 삭제할 수 있는 권한이 주어진다.
 - 그렇지않다면, [수정], [삭제] 버튼이 나타나지 않는다.
+
+
+![1-게시판섬네일](https://user-images.githubusercontent.com/78891624/129730534-ae8e69c3-be42-4d54-8ef5-3b3f69406644.gif)
+
 
 ###### 4.3.2.1 전체 게시판 조회
 
@@ -722,7 +730,10 @@ public String html(@RequestParam("lang")String lang,
 4.3.3 게시물 수정
 - 게시물 작성자가 로그인한 회원과 같다면 detailView.jsp에 [수정]버튼이 나타난다.
 - [수정]을 누르면 다음과 같이 Controller의 updateForm로 이동하여 수정할 수 있는 페이지(updateView.jsp)로 이동하게 된다.
--- BoardController1.java
+
+![3-게시물 수정](https://user-images.githubusercontent.com/78891624/129730550-77d4db2f-08ee-46c0-bd69-b5f1db48ba4f.gif)
+
+- BoardController1.java
 ```	
 @GetMapping("/updateForm")
 public String updateForm( @RequestParam("num")int num,
