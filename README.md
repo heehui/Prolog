@@ -94,6 +94,7 @@
 #### 4.1 DB 테이블 쿼리문
 
  - pro 권한 주기
+###### - MariaDB의 사용자를 root에서 'pro'로, 패스워드를 'pro1234'로 팀원들과 동일한 아이디와 패스워드를 갖도록 권한을 부여한다.
 
 ```create user 'pro'@'%' identified by 'pro1234';
 GRANT ALL PRIVILEGES ON *.* TO 'pro'@'%';
@@ -135,13 +136,15 @@ CREATE TABLE `replytable` (
 #### 4.2 환경설정
 1) pom.xml
 - JSP 
+###### - JSP가 컴파일이 가능하도록 한다.
 ```
-<dependency> <!-- tomcat-embed-jasper 가 있어야 JSP가 컴파일됨 -->
+<dependency> 
     <groupId>org.apache.tomcat.embed</groupId>
     <artifactId>tomcat-embed-jasper</artifactId>
 </dependency>		
 ```
 - JSTL
+###### - JSTL(JavaServer Pages Standard Tag Liary, 자바서버 페이지 표준 태그 라이브러리)를 사용할 수 있도록 한다.
 ```
 <!--  JSTL -->
 <dependency>
@@ -150,6 +153,7 @@ CREATE TABLE `replytable` (
 </dependency>
 ```
 -  JDBC 
+###### - JDBC(Java Database Connectivity)를 통해 자바에서 데이터베이스에 접속할 수 있도록 한다. 
 ```
 <dependency>
 	<groupId>org.springframework.boot</groupId>
@@ -157,6 +161,7 @@ CREATE TABLE `replytable` (
 </dependency>
 ```		
 - Lombok
+###### - getter, setter, toString 등을 @Getter, @Setter, @ToString 등의 annotation으로 자동생성하도록 해주는 라이브러리이다.
 ```
 <dependency>
 	<groupId>org.projectlombok</groupId>
@@ -165,6 +170,7 @@ CREATE TABLE `replytable` (
 </dependency>
 ```
 -  Mybatis
+###### - 자바와 DB를 위한 프레임워크로써 자바객체와 SQL을 매핑하는 방식이다.
 ```
 <dependency>
 	<groupId>org.mybatis.spring.boot</groupId>
@@ -173,7 +179,8 @@ CREATE TABLE `replytable` (
 </dependency>
 ```		
 - devtools
-```
+###### - 스프링 부트에서 제공하는 개발 편의를 위한 모듈로써 변경된 코드를 서버 또는 화면에 신속하게 반영해 결과를 확인할 수 있도록 한다.
+ ```
 <dependency>
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-devtools</artifactId>
@@ -181,7 +188,8 @@ CREATE TABLE `replytable` (
 	<optional>true</optional>
 </dependency>
 ```
-- mariaDB 
+- MariaDB 
+###### - MariaDB 연동
 ```
 <dependency>
 	<groupId>org.mariadb.jdbc</groupId>
@@ -191,7 +199,7 @@ CREATE TABLE `replytable` (
 ```
 
 2) application.yml(포트번호, jsp 적용, mariaDB 연동)
-- 포트번호 
+- 포트번호 지정
 ```
 server:
   port: 8900
@@ -202,6 +210,8 @@ server:
       enabled: true
 ```
 - jsp 적용
+###### - jsp 파일은 Springboot 의 templates 폴더안에서 작동하지 않고, webapp 아래 /WEB-INF/views/ 폴더를 만든 다음 .jsp 파일들을 넣어 실행할 수 있도록 한다.
+
 ```
 spring:
   mvc:
@@ -209,7 +219,7 @@ spring:
       prefix: /WEB-INF/views/
       suffix: .jsp
 ```
-- mariaDB 연동
+- MariaDB 연동
 ```
 datasource:
     driver-class-name: org.mariadb.jdbc.Driver
@@ -219,6 +229,9 @@ datasource:
 ```
 
 3) application.properties
+- Mybatis 연동
+###### - mybatis mapper 파일이 생성되는 위치를 지정한다.
+
 ```
 mybatis.mapper-locations=classpath:mapper/**/**.xml
 ```
@@ -226,9 +239,13 @@ mybatis.mapper-locations=classpath:mapper/**/**.xml
 
 #### 4.3 게시판 기능
 
- * BoardVO.java
-- lombok을 이용하여 @Data로 각 변수값의 setter, getter를 자동으로 생성시켜준다.
+- spring boot에서 다음과 같은 흐름으로 웹페이지가 실행된다.
+![0001 (2)](https://user-images.githubusercontent.com/78891624/129710374-38c179bb-eb64-45a5-94a4-f8f72ecc15cc.jpg)
 
+
+- BoardVO.java
+###### - lombok을 이용하여 @Data로 각 변수값의 setter, getter 등을 자동으로 생성시켜준다.
+###### - 회원아이디, 글번호, 게시판 카테고리명, 제목, 내용, 이미지, 작성일, 조회수 변수 생성
 ```
 @Data
 public class BoardVO {
@@ -245,9 +262,12 @@ public class BoardVO {
 ```
 
 ##### 4.3.1 게시물 작성 및 등록
+- 회원의 경우, 메인페이지에서 [개발언어]를 누르면 전체게시판 및 각 개발언어 게시판이 나타난다.
+- 회원은 공지사항을 제외하고 모든 게시물을 작성할 권한을 가지고 있다.
+- 게시판 화면에서 오른쪽에 연필모양 버튼을 눌러 게시물을 작성할 수 있다.
 
 1)  write.jsp
-- 게시판 카테고리명, 제목, 이미지, 내용, 회원번호, 회원아이디를 form을 통해 /writerAfter 로 보낸다.
+- 게시판 카테고리명, 제목, 이미지, 내용, 회원번호, 회원아이디를 <form>의 post방식을 통해 BoardController1의 writerAfter 로 보낸다.
 ```	    
 	    <form action="writeAfter" method = "post" enctype="multipart/form-data">
 	        	<div class="form-group">
@@ -285,7 +305,7 @@ public interface BoardDAO {
 	public boolean addBoard(BoardVO bvo);
 ```	
 3) BoardService1.java
-- Service에서는 MyBatis의 addBoard로 실행시킨다.
+- Service에서는 MyBatis의 addBoard를 실행시킨다.
 ```
 @Service
 public class BoardService1 {
@@ -300,7 +320,7 @@ public class BoardService1 {
 ```
 
 4) mybatismapper.xml
-- num(글번호)는 쿼리문에서 자동 수 증가를 해줬기 때문에 useGeneratedKeys="true" keyProperty="num" 를 지정해줌
+- num(글번호)는 쿼리문에서 자동 수 증가를 해줬기 때문에 useGeneratedKeys="true" keyProperty="num" 을 작성해준다.
 ```
  <insert id="addBoard" useGeneratedKeys="true" keyProperty="num">
 		INSERT INTO 
@@ -325,11 +345,8 @@ public class BoardService1 {
     </insert>
 ```
 
-
 5) BoardController1.java
-
-- 글 작성 버튼을 누르면 Controller의 /write로 와서 글쓰기 페이지가 나타난다.
-
+- 게시판 화면에서 연필모양 버튼을 클릭하면, Controller의 write로 와서 글쓰기 페이지가 나타난다.
 ```
 @Controller
 public class BoardController1 {
@@ -337,35 +354,34 @@ public class BoardController1 {
 	@Autowired
 	private BoardService1 bs;
 	
-@GetMapping("/write") //글작성 버튼을 누르면 이곳으로 이동
+	@GetMapping("/write")
 	public String write() {
 		return "write"; 
 	}
 ```
 
-- 글쓰기 페이지에서 게시판 카테고리명, 제목, 이미지, 내용을 입력한 후 [발행]을 누르면 /writeAfter 로 오게 된다.
-(입력한 값들을 @RequestParam을 통해 파라미터로 가져오고, user_id(회원아이디)는 session에 저장해둔다.)
-- 첨부 이미지를 db에 저장하기 위해, 이미지가 저장될 외부 경로 path를 지정하여 이미지파일의 이름을 가져온다.
-- 게시물 내용은 개행도 db에 저장될 수 있도록 replace를 이용하여 enter(즉, \r\n)를 <br> 태그로 저장되도록 한다.
-- BoardService1에서 생성한 addBoard를 불러와 각 파라미터값들을 넣어 insert되도록 한다.
-
-
+###### - 글쓰기 페이지에서 java, javascript, spring, html 중 원하는 개발언어 게시판 카테고리를 콤보박스로 선택한다.
+###### - 제목, 이미지 첨부, 내용을 입력한 후 [발행]을 누르면 BoardController1의 writeAfter 로 이동한다.
+###### - 입력한 값들을 @RequestParam을 통해 파라미터로 가져오고, user_id(회원아이디)는 session에 저장되도록 한다.
+###### - 첨부한 이미지는 이미지가 저장될 외부 경로 path를 지정한 후 이미지파일의 이름을 가져올 수 있도록 한다.
+###### - 게시물의 내용은 개행도 적용될 수 있도록 replace를 이용하여 enter(즉, \r\n)를 br 태그로 db에 저장되도록 한다.
+###### - BoardService1에서 생성한 addBoard를 불러와 각 파라미터값들을 넣어 insert되도록 한다.
+###### - 게시물을 등록하면 전체 게시판 화면으로 넘어갈 수 있도록 return 해준다.
+ 
 ```
-@PostMapping("/writeAfter")  //글 작성 후 '발행'을 누르면 이곳으로 이동
-	public String writeAction(
+@PostMapping("/writeAfter")
+public String writeAction(
 			HttpServletRequest req,
 			HttpSession session,
 			@RequestParam("file") MultipartFile file, //이미지파일
 			@RequestParam("lang") String lang, //게시판 카테고리명
 			@RequestParam("title")String title, //글 제목
 			@RequestParam("user_num")int user_num, //회원번호
-				Model model1) throws IllegalStateException, IOException {
+			Model model1) throws IllegalStateException, IOException {
 
-		
-		 String contents = req.getParameter("contents"); //글 내용
-		 contents = contents.replace("\r\n", "<br>"); //db에 저장할 때, 개행부분을 <br>태그로 변경해준 후 저장
-		
-		
+		String contents = req.getParameter("contents"); //게시물 내용
+		contents = contents.replace("\r\n", "<br>"); //db에 저장할 때, 개행부분을 br 태그로 변경해준 후 저장
+
 		String user_id=req.getParameter("user_id"); //회원 아이디
 		session.setAttribute("user_id", user_id);
 	
@@ -373,22 +389,26 @@ public class BoardController1 {
 		
 		if (!file.getOriginalFilename().isEmpty()) {
 			file.transferTo(new File(path + file.getOriginalFilename()));
-			}
+		}
 		
 		bs.addBoard(new BoardVO(user_id,user_num,0,lang, title, contents, file.getOriginalFilename())); //게시물이 등록됨
-		return "board/mainBoard"; //전체게시판으로 이동
-	}
+		return "board/mainBoard"; //전체 게시판으로 이동
+}
 ```	
 
 ##### 4.3.2 게시물 조회
+- 메인페이지에서 [개발언어]를 누르면 전체게시판 및 각 개발언어 게시판이 나타난다.
+- 등록된 게시물은 섬네일 형태로 이미지, 작성일, 조회수가 나타난다.
+- 각 게시물을 클릭하면 그에 맞는 상세페이지로 이동한다.
+- 게시물 작성자의 회원아이디와 로그인한 회원아이디가 같으면 게시물을 수정 및 삭제할 수 있는 권한이 주어진다.
+- 그렇지않다면, [수정], [삭제] 버튼이 나타나지 않는다.
+
 ###### 4.3.2.1 전체 게시판 조회
 
 1) board/mainBoard.jsp
-- ajax를 통해 Controller에 boardList 로 요청을 보내면
-컨트롤러 -> mapper 인터페이스 -> mapper.xml에서 쿼리를 실행해 이 값을 현재 mainBoard.jsp의 result에 데이터 값을 가지고 오게 된다.
-- forEach문과 grid CSS를 적용하여 html을 생성해 tbody 부분에 섬네일 형식으로 append 시켜준다. (섬네일에 나타나는 것: 이미지, 작성일, 조회수) 
-- 그리고 각 섬네일을 클릭하면, 그에 맞는 게시물 정보를 BoardController1의 detailView 로 보내 detailView.jsp가 실행되도록 한다.
-	
+- ajax를 통해 BoardController1에 boardList 로 요청을 보내면 BoardController1 --> BoardService1 --> mapper 인터페이스 --> mapper.xml에서 쿼리를 실행해 이 값을 현재 mainBoard.jsp의 result에 데이터 값을 가지고 오게 된다.
+- forEach문과 grid CSS를 적용하여 html을 생성해 <tbody> 부분에 섬네일 형식으로 append 시켜준다. (섬네일에 나타나는 것: 이미지, 작성일, 조회수) 
+- 그리고 각 섬네일을 클릭하면, 그에 맞는 게시물 정보를 BoardController1의 detailView 로 보내 상세페이지인 detailView.jsp가 실행되도록 한다.
 ```
 <script>
 
@@ -396,7 +416,7 @@ $(document).ready(function() {
     $.ajax({
     	
     	url: "boardList", 
-    	success: function(result){         
+    	success: function(result){  // result    
         var html = "<div id='grid' >";
        
        result.forEach(function(item){
@@ -411,8 +431,9 @@ $(document).ready(function() {
         				'&reply_cnt=' + item.reply_cnt +
         				'&hit=' + item.hit +
         				'&date1=' + item.date1 +
-        				'&lang=' + item.lang + "'>" + "<img id='hov1' src='/upload/" + item.image + "' width='200'  height='200'></a><h6 id='date1'>작성일: " + item.date1 
-        						+ '<br><img src="../images/click.png">' + item.hit + ' 댓글수:' + item.reply_cnt + "</h6></div>";
+        				'&lang=' + item.lang + "'>" + "<img id='hov1' src='/upload/" + item.image + "' width='200'  height='200'></a>
+									<h6 id='date1'>작성일: " + item.date1 
+        								+ '<br><img src="../images/click.png">' + item.hit + ' 댓글수:' + item.reply_cnt + "</h6></div>";
        })    
        $("#listArea").append(html);
      }});
@@ -420,8 +441,7 @@ $(document).ready(function() {
 
 </script>
 </head>
-<body>
-			
+<body>		
 	<tbody id="listArea" style="width: 50%">
 	</tbody>
 ```
@@ -439,20 +459,49 @@ $(document).ready(function() {
 	}
 ```	
 4) mybatismapper.xml
-- 모든 값을 select하고 작성일은 2021-08-12 13:09:37 형태로 포맷한다.
-- 글번호(num)을 기준으로 정렬한다.
+- 모든 값을 select하고 작성일(date1)은 2021-08-12 13:09:37 형태로 포맷한다.
+- 글번호(num)을 기준으로 내림차순 정렬한다.
 
 ```
 <select id="getAllBoard" resultType="com.cos.prologstart.vo.BoardVO">
 	SELECT
 		user_id,user_num, num, lang, title, contents, image, DATE_FORMAT(date1, '%Y-%m-%d %T') as 'date1',hit, reply_cnt
-
 	FROM
 		boardTable2
 	ORDER BY num desc
 </select>
 ```
+- 조회수
+###### - 해당 게시물 섬네일을 클릭할 때마다 조회수가 1씩 증가하도록 한다.
 
+##### 1. BoardDAO.java
+###### - 게시물의 글번호(num)을 매개변수로 하는 mapper 메소드를 생성한다.
+```
+public int hitCount(int num);
+
+```
+##### 2. BoardService.java
+###### - Service에서는 MyBatis의 hitCount로 실행시킨 데이터를 BoardController1로 보낸다.
+```
+public int hitCount(int num) {
+	return bdao.hitCount(num);
+}
+```
+##### 3. mybatismapper.xml
+###### - 해당 게시물 섬네일을 클릭할 때마다 조회수(hit)가 +1씩 증가하도록 한다.
+###### - IFNULL 을 이용하면 조회수(hit)가 NULL 일경우 0으로 표기하도록 한다.
+```
+<update id="hitCount" parameterType="com.cos.prologstart.vo.BoardVO">
+	UPDATE 
+		boardTable2
+        SET 
+        	hit = IFNULL(HIT, 0) + 1
+            
+        WHERE 
+		num = #{num}
+    
+</update>
+```
 
 5) BoardController1.java
 - Controller에서는 boardList로 받은 요청을 Service로 넘겨준다. 
@@ -461,29 +510,27 @@ $(document).ready(function() {
 @GetMapping("/boardList")
 @ResponseBody public List<BoardVO> boardList(){ 
  	return bs.getAllBoard(); //전체 게시판 모두 조회 
-
 }
 ```
-- 각 게시판의 섬네일을 누르면 Controller의 @GetMapping("/detailView")로 이동한다.
+- 각 게시판의 섬네일을 누르면 BoardController1의 detailView로 이동한다.
 - 각 파라미터 값을 Model을 이용하여 detailView.jsp로 보낸다.
-- 게시물의 내용은 db에 enter(= \r\n)를 <br> 태그로 저장했기 때문에 다시 replace를 통해 \r\n로 변경하여 출력되도록 한다.
+- 게시물의 내용은 db에 enter(= \r\n)를 br 태그로 저장했기 때문에 다시 replace를 통해 \r\n로 변경하여 개행도 출력될 수 있도록 한다.
 
 ```
 @GetMapping("/detailView") //게시글 상세보기를 누르면 보이는 화면
-	public String loginview(
-			HttpServletRequest req, HttpSession session,
-			 		   @RequestParam("num")int num,
-					   @RequestParam("title")String title,
-					   @RequestParam("image")String image,
-					   @RequestParam("lang")String lang,
-					   @RequestParam("writer")String writer,
-					   @RequestParam("date1")String date1,
-					   @RequestParam("hit")int hit,
-					   @RequestParam("user_num")int user_num,
-					   Model model1) throws Exception{
+public String loginview( HttpServletRequest req, HttpSession session,
+			 	@RequestParam("num")int num,
+				@RequestParam("title")String title,
+				@RequestParam("image")String image,
+				@RequestParam("lang")String lang,
+				@RequestParam("writer")String writer,
+				@RequestParam("date1")String date1,
+				@RequestParam("hit")int hit,
+				@RequestParam("user_num")int user_num,
+				Model model1) throws Exception{
 		
-		 String contents = req.getParameter("contents"); 
-		 contents = contents.replace("<br>", "\r\n");
+		String contents = req.getParameter("contents"); 
+		contents = contents.replace("<br>", "\r\n"); //br 태그를 \r\n 로 변경
 		
 		model1.addAttribute("num", num);
 		model1.addAttribute("title", title);
@@ -493,37 +540,22 @@ $(document).ready(function() {
 		model1.addAttribute("date1", date1);
 		model1.addAttribute("writer", writer);
 		model1.addAttribute("user_num", user_num);
-		model1.addAttribute("hit", bs.hitCount(num));
+		model1.addAttribute("hit", bs.hitCount(num)); //조회수에 대한 BoardService 실행
 		
 		
 		String user_id =req.getParameter("user_id");
 		session.setAttribute("user_id", user_id);
 		
 		List<ReplyVO> reList = bs.readReply(num);//댓글이 보이도록
-		model1.addAttribute("reList", reList);//List로 넘김
+		model1.addAttribute("reList", reList);//reList로 댓글 List를 넘김
 		
-		return "detailView"; 
+		return "detailView"; //상세페이지로 이동
 	}
 ```
 6) detailView.jsp
-- 각 게시판에서 섬네일을 클릭하면 위의 Controller와 같이 해당 상세페이지로 이동하게 된다.
-- 클릭한 게시물의 작성자가 로그인한 회원아이디와 같다면, 게시물을 수정 및 삭제 할 수 있는 권한이 있다.
-- 비회원이나, 로그인한 회원이 해당 게시물 작성자와 다르다면 수정 및 삭제 버튼이 보이지 않는다.
-- [수정]을 누르면 Controller의 updateForm로 이동한다.
-- [삭제]를 누르면 Controller의 delete로 이동한다.
+- 각 게시판에서 섬네일을 클릭하면 위의 해당 상세페이지로 이동하게 된다.
+- 해당 게시물의 게시판 카테고리명, 제목, 이미지, 내용이 나타난다.
 ```
-<%@ include file="../views/layout/header2.jsp"%>
-
-<script>
-   
-   function board(){
-      location.href="board";
-   }
-
-</script>
-</head>
-<body>
-
 <div id="container">
    <div class="second_container">
       <div class="jumbotron-text">
@@ -560,12 +592,12 @@ $(document).ready(function() {
                   ${contents}
                </textarea>
                </td>
-
-            <table align="left">
-                <button type="button" class="btn btn-info" id="back" onclick="history.go(-1)">뒤로가기</button>
-                  <button type="button" class="btn btn-info" id="list" onclick="board()" >목록</button><br><br>
-      
-   
+```
+- 클릭한 게시물의 작성자가 로그인한 회원아이디와 같다면, 게시물을 수정 및 삭제 할 수 있는 권한이 있다.
+- 비회원이나, 로그인한 회원이 해당 게시물 작성자와 다르다면 [수정], [삭제] 버튼이 나타나지 않는다.
+- [수정]을 누르면 Controller의 updateForm로 이동한다.
+- [삭제]를 누르면 Controller의 delete로 이동한다.
+```
          <c:choose>
             <c:when test="${writer == user_id || user_id == 'admin_user' && user_id != '비회원'}">
              
@@ -586,16 +618,14 @@ $(document).ready(function() {
             </table><br>
 ```
 	
-
 ###### 4.3.2.2  java, html, javascript, spring 게시판 조회
+- java, html, javascript, spring 게시판에서 각 개발언어별 게시물이 조회되도록 한다. 
 		
 1) board/html.jsp (java, javascript, spring 게시판도 동일)
-- c 태그라이브러리를 이용하여 비회원, 회원 권한을 나눌 수 있도록 한다.
-- 로그인 회원이라면, controller의 write(글쓰기)가 가능하도록 한다.
-- 비회원이라면(아이디가 null이라면), 글쓰기 버튼은 보이지 않고 각 게시판의 게시물을 읽을 수 있는 권한만 갖게 된다. 
+- <c:choose> 를 이용하여 비회원, 회원 권한을 나눈다.
+- 로그인 회원이라면, Controller의 write(글쓰기)가 가능하도록 한다.
 ```
- <%@ include file="../layout/header2.jsp"%><br>
- 	<h1>HTML 게시판</h1>
+<h1>HTML 게시판</h1>
 	<hr>
  	<c:choose>
  		<c:when test="${principal.user.username != null }"> <!-- 회원이라면 -->
@@ -603,12 +633,15 @@ $(document).ready(function() {
 				<img src="../images/pencil.png" width="30"></button></a></div>
 		</c:when>
 	</c:choose>		
-		
+```		
+- 비회원이라면(아이디가 null이라면), 글쓰기 버튼은 보이지 않고 각 게시판의 게시물을 읽을 수만 있도록 한다. 
+
+```
 	<table align="center">
 		<tbody style="width: 50%">
 		<div id="grid">
 		<c:choose>
-			<c:when test="${principal.user.username == null}"> <!-- 비회원이라면 -->
+			<c:when test="${principal.user.username == null}"> <!-- 비회원 이라면 -->
 			<c:forEach var="imsi" items="${menu}">        				
 			<div class='image1'>
 		<a href = 'detailView?contents=${imsi.contents}&image=${imsi.image}&title=${imsi.title}&lang=${imsi.lang}
@@ -616,7 +649,7 @@ $(document).ready(function() {
 		<img id='hov1' src='/upload/${imsi.image}' width="200" height="200"></a><h6 id='date1'>작성일: ${imsi.date1} <br>조회수: ${imsi.hit}</h6> </div>
 			</c:forEach>
 			</c:when>
-			<c:otherwise>
+			<c:otherwise> <!-- 회원 이라면 -->
 			<c:forEach var="imsi" items="${menu}"> 
 		        	<div class='image1'>
 				<a href = 'detailView?contents=${imsi.contents}&image=${imsi.image}&title=${imsi.title}&lang=${imsi.lang}										   &num=${imsi.num}&date1=${imsi.date1}&user_id=${principal.user.username}&writer=${imsi.user_id}&hit=${imsi.hit}
@@ -626,19 +659,10 @@ $(document).ready(function() {
 			</c:otherwise>
 		</c:choose>		
 		</tbody>
-			</div>
-			 <button type="button" class="btn btn-info" id="btnUpdate" onclick="history.go(-1)">뒤로가기</button>	
-		</table>		
-		</div>
-			</div>
-			</div>
-	<%@ include file="../layout/footer.jsp"%>
-</body>
-</html>
 ```
 	
 2) BoardDAO.java
-- 각 게시판 이름(lang)에 따라 게시판 조회에 대한 mapper 메소드를 생성한다.
+- 개발언어별 게시판 카테고리명(lang)에 따라 게시판 조회에 대한 mapper 메소드를 생성한다.
 ```
 	public List<BoardVO> getMenu(String lang);
 ```
@@ -663,13 +687,12 @@ $(document).ready(function() {
 </select>
 ```
 
-
 5) BoardController1.java
-- layout/header2.jsp에 생성된 게시판 메뉴 버튼에서 html 버튼을 클릭하면, 
-html을 lang값으로 받아와서 controller의 @GetMapping("/html")-> Serivce -> 매퍼 인터페이스 -> mapper.xml에서 쿼리값을 board/html.jsp로 이동한다.
+- layout/header2.jsp에 생성된 게시판 카테고리 버튼 중 [html] 을 클릭하면,
+- html을 lang값으로 받아와서 Controller의 html --> Serivce --> 매퍼 인터페이스 --> mapper.xml에서 데이터 값이 board/html.jsp로 이동한다.
 
 ```
-@GetMapping("/html")//
+@GetMapping("/html")
 public String html(@RequestParam("lang")String lang,
 		    HttpServletRequest req, 
 		    HttpSession session,
@@ -681,10 +704,8 @@ public String html(@RequestParam("lang")String lang,
 	model1.addAttribute("menu", bs.getMenu(lang)); ////
 		
 	return "board/html";
-
 }
 ```
-
 - layout/header2.jsp 는 다음과 같다.
 ```
 <table id="example" class="display" style="width: 50%">
@@ -699,19 +720,20 @@ public String html(@RequestParam("lang")String lang,
 ```
 
 4.3.3 게시물 수정
-- 게시물 작성자가 로그인한 회원과 같다면 detailView.jsp에서 [수정]버튼이 생성된다.
-- [수정]을 누르면 다음과 같이 Controller의 updateForm로 이동하여 수정할 수 있는 페이지로 이동하게 된다.
+- 게시물 작성자가 로그인한 회원과 같다면 detailView.jsp에 [수정]버튼이 나타난다.
+- [수정]을 누르면 다음과 같이 Controller의 updateForm로 이동하여 수정할 수 있는 페이지(updateView.jsp)로 이동하게 된다.
 -- BoardController1.java
 ```	
-@GetMapping("/updateForm") //게시글 수정버튼을 누르면
-	  public String updateForm( @RequestParam("num")int num,
-			  	    @RequestParam("title")String title,
-			  	    @RequestParam("image")String image,
-			 	    @RequestParam("lang")String lang,
-			  	    @RequestParam("writer")String writer,
-			  	    @RequestParam("contents")String contents,
-			  	    @RequestParam("date1")String date1,
-			  	    Model model1) {
+@GetMapping("/updateForm")
+public String updateForm( @RequestParam("num")int num,
+			  @RequestParam("title")String title,
+			  @RequestParam("image")String image,
+			  @RequestParam("lang")String lang,
+			  @RequestParam("writer")String writer,
+			  @RequestParam("contents")String contents,
+			  @RequestParam("date1")String date1,
+			  Model model1) {
+	
 		  model1.addAttribute("num", num);
 		  model1.addAttribute("title", title);
 		  model1.addAttribute("image", image);
@@ -725,24 +747,12 @@ public String html(@RequestParam("lang")String lang,
 ```
 
 1) updateView.jsp
-- detailView.jsp의 값을 그대로 갖고 있지만, 수정할 수 있도록 <input>태그로 만들어 주었다.
-- 게시판 카테고리, 제목, 내용을 수정할 수 있다.
+- detailView.jsp의 값을 그대로 가지고 있지만, 수정할 수 있도록 <input> 태그 형태로 표시된다.
+- 수정페이지에서는 게시판 카테고리명, 제목, 내용을 수정할 수 있다.
 - 이미지, 작성자는 바뀌지 않는다.
-- 작성일은 [수정완료]를 누르면 Controller의 updateclear로 이동한다.
+- 작성일은 [수정완료]를 누르면 Controller의 updateclear로 이동하여 수정된 날짜로 변경된다.
 ```
-<%@ include file="../views/layout/header.jsp"%>
-<script>
-	function board(){
-		location.href="board";
-	}
-
-</script>
-</head>
-<body>
-<%@ include file="../views/layout/header2.jsp"%>
-<div class="jumbotron text-center" style="margin-bottom:0; margin-top:0;">
-  <h1>게시판 글 수정</h1>
-</div>
+<h1>게시판 글 수정</h1>
 	
 <div id="container">
    <div class="second_container">
@@ -807,27 +817,29 @@ public int updateclear(int num, String lang,String title,String image, String co
 }	
 ```
 4) mybatismapper.xml
-- 글번호(num)을 조건문으로 하여 해당 게시물의 카테고리명, 제목, 이미지, 내용을 수정된다.
+- 글번호(num)을 조건문으로 하여 해당 게시물의 카테고리명, 제목, 내용이 수정된다.
 - 작성일은 NOW()를 통해 수정한 날짜로 업데이트 되도록 한다.
 ```
 <update id="updateclear" parameterType="com.cos.prologstart.vo.BoardVO">
-	UPDATE boardTable2
+	UPDATE 
+		boardTable2
         SET 
         	lang = #{lang},
         	title = #{title},
         	image = #{image},
             	contents = #{contents},
             	date1 = NOW()
-        WHERE num = #{num}
+        WHERE 
+		num = #{num}
 </update>
 ```
 5) BoardController1.java
-- updateView.jsp에서 게시물을 수정하고[수정완료]를 누르면 Controller의 updateclear로 이동한다.
-- 게시물 내용은 개행도 db에 저장될 수 있도록 replace를 이용하여 enter(즉, \r\n)를 <br> 태그로 업데이트가 되도록 한다.
-- bs.getBoardOne(num)는 글번호를 조건문으로 게시물 값을 조회하는 메서드이다.
+- updateView.jsp에서 게시물을 수정하고 [수정완료]를 누르면 Controller의 updateclear로 이동한다.
+- 게시물 내용은 개행도 db에 저장될 수 있도록 replace를 이용하여 enter(즉, \r\n)를 br 태그로 업데이트가 되도록 한다.
+- bs.getBoardOne(num)는 글번호를 조건문으로 해당 게시물 정보를 조회하는 메서드이다.
 - view.jsp에서 수정된 게시물의 값들을 조회해야 하기 때문에 게시물의 내용을 다시 replace를 통해 \r\n로 변경하여 출력되도록 한다.
 ```
-  @GetMapping("/updateclear")//수정완료가 되면
+  @GetMapping("/updateclear")
   public String updateclear( @RequestParam("num")int num,
 			     @RequestParam("title")String title,
 			     @RequestParam("image")String image,
@@ -850,8 +862,7 @@ public int updateclear(int num, String lang,String title,String image, String co
 	model1.addAttribute("menu", bs.getBoardOne(num));
 		
 	contents = contents.replace("<br>", "\r\n");
-		
-	 model1.addAttribute("contents", contents);
+	model1.addAttribute("contents", contents);
 		  
 	List<ReplyVO> reList = bs.readReply(num);
  	model1.addAttribute("reList", reList);
@@ -864,7 +875,6 @@ public int updateclear(int num, String lang,String title,String image, String co
 - [수정완료]를 누르면 해당 페이지로 이동한다.
 - 수정된 내용으로 페이지에 값이 나타난다.
 ```
-<%@ include file="../views/layout/header2.jsp"%>
 <div id="container">
    <div class="second_container">
 	<div class="lang">
@@ -891,14 +901,14 @@ public int updateclear(int num, String lang,String title,String image, String co
 		<td id = "contents" style='word-break:break-all'><textarea name="contents" cols="100" rows="15" readonly="readonly" wrap="hard">${contents}</textarea></td>
 	    </tr>
 	 </table>
-		<table align="left">
-			<button type="button" class="btn btn-info" id="back" onclick="history.go(-1)" style="float:left;">뒤로가기</button>
-			<button type="button" class="btn btn-info" id="list" onclick="board()" style="float:right;">목록</button>
-		</table>
+
 ```
 4.3.4 게시물 삭제
+- 게시물 작성자가 로그인한 회원과 같다면 detailView.jsp에 [삭제]버튼이 나타난다.
+- [삭제]를 누르면 Controller의 delete로 이동한다.
+		 
 1) BoardDAO.java
-- 글번호를 매개변수로 하는 mapper 메소드를 생성한다.
+- 글번호(num)를 매개변수로 하는 mapper 메소드를 생성한다.
 ```
 public int deleteBoard(int num);
 ```
@@ -910,6 +920,7 @@ public int deleteBoard(int num) {
 }
 ```
 3)mybatismapper.xml
+- 글번호(num)을 조건문으로 해당 게시물 전체가 삭제된다.
 ```
 <delete id="deleteBoard" parameterType="com.cos.prologstart.vo.BoardVO">
 	DELETE 
@@ -920,7 +931,7 @@ public int deleteBoard(int num) {
 </delete>
 ```		 
 4) BoardController1.java
-- detailView.jsp에서 해당 게시물의 작성자와 로그인 회원이 동일하다면, [삭제] 버튼이 보이고 [삭제]를 누르면 글번호를 통해 해당 게시물과, 댓글들이 모두 삭제된다.
+- [삭제]를 누르면 다음과 같이 Controller의 delete로 이동하여 해당 게시물과, 댓글들이 모두 삭제된다.
 ```
  @GetMapping("/delete")//게시글 삭제
  public String delete(@RequestParam("num")int num) throws Exception {
@@ -929,7 +940,12 @@ public int deleteBoard(int num) {
 	return "board/mainBoard";
 }
 ```
+		 
 4.3.5 프로필페이지
+- 로그인한 상태에서 layout/header.jsp의 [PROFILE]을 누르면 로그인한 회원의 프로필페이지가 나타난다.
+- 로그인한 회원이 작성했던 게시물을 게시판 화면과 동일하게 섬네일 형태로 볼 수 있다.
+- 내가 작성한 댓글보기를 누르면 로그인한 회원이 작성했던 댓글을 하번에 모아볼 수 있는 replyList.jsp 로 이동하게 된다.
+		 
 1) BoardDAO.java
 - session에 저장된 회원아이디를 매개변수로 하는 mapper 메소드를 생성한다.
 ```
@@ -943,6 +959,7 @@ public List<BoardVO> goMypage(String user_id){
 }
 ```
 3)mybatismapper.xml
+- session으로 불러온 회원아이디의 게시판 정보를 전체 조회한다.
 ```
 <select id="goMypage" resultType="com.cos.prologstart.vo.BoardVO">
 	SELECT
@@ -954,9 +971,9 @@ public List<BoardVO> goMypage(String user_id){
 </select>
 ```
 4) UserController.java
-- 로그인한 상태에서 layout/header.jsp의 [PROFILE]을 누르면 로그인한 회원의 프로필페이지가 나타난다.
-- 로그인한 회원이 작성했던 게시물을 섬네일 형태로 볼 수 있다.
-- 내가 작성한 댓글보기를 누르면 로그인한 회원이 작성했던 댓글을 하번에 모아볼 수 있는 replyList.jsp 로 이동하게 된다.
+- 로그인한 상태에서 layout/header.jsp의 [PROFILE] 버튼을 누르면
+- 해당 시큐리티 회원아이디(principal.user.username)와 회원번호(principal.user.id)가 넘어간다
+- 이 값들이 UserController의 pageUserId로 이동하여 해당 회원에 대한 프로필페이지가 나타난다.
 ```
 @RequiredArgsConstructor
 @Controller
@@ -982,49 +999,49 @@ public class UserController {
 		return "profile";
 	}
 ```
-5) profile.jsp
-- 
-- 내가 작성한 글 개수는 fn 태그라이브러리를 이용하여 menu로 받아온 List 개수를 이용한다.
-- 새 글 등록 : 게시판에서 글을 작성한 방식과 동일하게 BoardController1의 write로 이동하여 글을 작성할 수 있다.
-- 내가 작성한 댓글 보기
-- 게시판에서 상세페이지로 게시물을 보는 것과 동일한 형태로 프로필페이지의 글도 읽을 수 있다.
+- layout/header.jsp 은 다음과 같다. 
 ```
-<div class="name-group">
-           <h2>${dto.user.username}<br>(${dto.user.name})</h2>
+<header class="header">		
+		<div class="container">
+			<a href="/" class="logo">
+				Prolog
+			</a>
+			<nav class="navi">
+				<ul class="navi-list">
+					<li class="navi-item"><a href="/index">
+							<i class="fas fa-home"></i>
+						</a></li>
+					<li class="navi-item"><a href="/board">
+							<i class="fa fa-bars"></i>
+						</a></li>																							<!-- title : 마우스 올리면 로그인한 회원아이디가 뜨도록 -->
+					<li class="navi-item"><a href="/${principal.user.id}?user_id=${principal.user.username}"  <!-- [PROFILE] 버튼 -->
+								 	title="${principal.user.username}(${principal.user.name})님 로그인중">
+							<i class="far fa-user"></i>
+						</a></li>
+				</ul>
+			</nav>
+		</div>
+	</header>
+```
 
-                <c:choose>
-                    <c:when test="${dto.pageOwnerState}">
+5) profile.jsp
+- 내가 작성한 글 개수는 fn 태그라이브러리를 이용하여 menu로 받아온 List 개수를 이용한다.
+```
+<li><a href=""> 게시물<span>${fn:length(menu)}</span>
+```
+- [새 글 등록] : 게시판에서 글을 작성한 방식과 동일하게 BoardController1의 write로 이동하여 글을 작성할 수 있다.
+- [내가 작성한 댓글 보기]: 내가 작성한 댓글 리스트 화면인 replyList.jsp로 이동한다.
+``` 
+<c:choose>
+                <c:when test="${dto.pageOwnerState}">
                         <button class="cta" onclick="location.href='write'">새 글 등록</button>
                         <button class="cta" onclick="location.href='myReplyList?user_id=${principal.user.username}'">내가 작성한 댓글 보기</button>
-                    </c:when>
+                </c:when>
                     
-                </c:choose>
-			<div class="subscribe">
-				<ul>
-					<li><a href=""> 게시물<span>${fn:length(menu)}</span>
-					</a></li>
-					<li><a href="javascript:subscribeInfoModalOpen(${dto.user.id});"> 구독정보<span>${dto.subscribeCount}</span>
-					</a></li>
-				</ul>
-			</div>
-			<div class="state">
-				<h4>${dto.user.bio}</h4>
-				<h4>${dto.user.website}</h4>
-			</div>
-		</div>
-		<!--유저정보 및 사진등록 구독하기-->
-	</div>
-</section>
-
- 	<div class="row">					
-			<h2>
-			<c:choose>
-				<c:when test="${dto.pageOwnerState}">내가 작성한 글 
-				</c:when>
-				<c:otherwise>
-					${dto.user.username}님이 작성한 글
-				</c:otherwise>
-			</c:choose> </h2>
+ </c:choose>
+```
+- 게시판에서 상세페이지로 게시물을 보는 것과 동일한 형태로 프로필페이지의 글도 읽을 수 있다. (detailView.jsp로 이동)
+```
 	<table align="center">
 	<tbody style="width: 50%">
 		<div id="grid">
@@ -1037,19 +1054,16 @@ public class UserController {
 		 </div>
 			<td><button type="button" class="btn btn-info" id="btnUpdate" onclick="history.go(-1)">뒤로가기</button></td>
 			<td><button type="button" class="btn btn-info" id="btnUpdate" onclick="location.href='board'" style="float:right;">목록</button></td>
-			</table>			
-	</div>
-		</div>
-			</div>
-</section>
-
+	</table>			
 ```
 4.4 댓글 기능
 - ReplyVO.java
+###### - lombok을 이용하여 @Data로 각 변수값의 setter, getter 등을 자동으로 생성시켜준다.
+###### - 게시물 글번호, 댓글 번호, 댓글 내용, 작성자, 작성일 변수 생성
 ```
 @Data
 public class ReplyVO {
-	private int num; //게시글 번호
+	private int num; //게시물 글번호
 	private int reply_num; //댓글 번호
 	private String content; //댓글 내용
 	private String writer; //작성자
