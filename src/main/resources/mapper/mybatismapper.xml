@@ -4,7 +4,7 @@
 <mapper namespace="com.cos.prologstart.dao.BoardDAO">
     <insert id="addBoard" useGeneratedKeys="true" keyProperty="num">
 		INSERT INTO 
-	    	boardTable2
+	    		boardTable2
 	   			(
 	   				user_id,
 	   				lang,
@@ -13,7 +13,7 @@
 					image,
 					user_num
 				)
-	    	VALUES
+	    VALUES
 	   			(
 	   				#{user_id},
 	   				#{lang},
@@ -36,11 +36,12 @@
 	
 	<select id="getMenu" resultType="com.cos.prologstart.vo.BoardVO">
 		SELECT
-			 user_id, user_num,num, lang, title, contents, image, DATE_FORMAT(date1, '%Y-%m-%d %T') as 'date1', hit,reply_cnt
+			 user_id, user_num, num, lang, title, contents, image, DATE_FORMAT(date1, '%Y-%m-%d %T') as 'date1', hit, reply_cnt
 		FROM
 			boardTable2
 		WHERE
 			lang = #{lang}
+		ORDER BY num desc
 	</select>
 	
 	
@@ -54,7 +55,8 @@
 	</select>
 	
 	<update id="updateclear" parameterType="com.cos.prologstart.vo.BoardVO">
-		UPDATE boardTable2
+		UPDATE
+			 boardTable2
         SET 
         	lang = #{lang},
         	title = #{title},
@@ -62,15 +64,18 @@
             contents = #{contents},
             date1 = NOW()
             
-        WHERE num = #{num}
+        WHERE 
+        	num = #{num}
 
 	</update>
 	
 	
 	<delete id="deleteBoard" parameterType="com.cos.prologstart.vo.BoardVO">
 		DELETE 
-		FROM boardTable2
-        WHERE num = #{num}
+		FROM 
+			boardTable2
+        WHERE 
+        	num = #{num}
 	</delete>
 	
 	<select id="goMypage" resultType="com.cos.prologstart.vo.BoardVO">
@@ -83,35 +88,42 @@
 	</select>
 	
 	<update id="hitCount" parameterType="com.cos.prologstart.vo.BoardVO">
-		UPDATE boardTable2
+		UPDATE 
+			boardTable2
         SET 
         	hit = IFNULL(HIT, 0) + 1
             
-        WHERE num = #{num}
+        WHERE 	
+        	num = #{num}
     
 	</update>
 	
  	<update id="ReplyCount" parameterType="int">
-		UPDATE boardTable2
-		SET reply_cnt = (select count(*) from replyTable where num = #{num})
-		WHERE num = #{num}	
+		UPDATE 
+			boardTable2
+		SET 
+			reply_cnt = (select count(*) from replyTable where num = #{num})
+		WHERE 
+			num = #{num}	
 
 	</update> 
 	
 	<select id="readReply" resultType="com.cos.prologstart.vo.ReplyVO">
-		select 
+		SELECT
 			reply_num,
 			content,
 			writer,
 			DATE_FORMAT(regDate, '%Y-%m-%d %T') as 'regDate'
-		from replyTable   
-		where num = #{num}
+		FROM 
+			replyTable   
+		WHERE 
+			num = #{num}
 		
 	</select>
 	
 	<insert id="writeReply">
-		insert into 
-		replyTable(num,content,writer)   
+		INSERT INTO
+			replyTable(num,content,writer)   
 		VALUES(
 	   				#{num},
 	   				#{content},
@@ -121,53 +133,52 @@
 	
 	<delete id="deleteReply" parameterType="com.cos.prologstart.vo.ReplyVO">
 		DELETE 
-		FROM replyTable
-        WHERE reply_num = #{reply_num}
+		FROM 
+			replyTable
+        WHERE 
+        	reply_num = #{reply_num}
 	</delete>
 	
 	<delete id="deleteAllReply" parameterType="com.cos.prologstart.vo.ReplyVO">
 		DELETE 
-		FROM replyTable
-        WHERE num = #{num}
+		FROM 
+			replyTable
+        WHERE 
+        	num = #{num}
 	</delete>
 	
 	 <update id="updateReply" parameterType="com.cos.prologstart.vo.ReplyVO">
-		UPDATE replyTable
+		UPDATE 
+			replyTable
         SET 
         	content = #{content},
         	regDate = NOW()
        
-        WHERE reply_num = #{reply_num}
+        WHERE 
+        	reply_num = #{reply_num}
 	</update>
 	
 	<select id="myReplyList" resultType="com.cos.prologstart.vo.ReplyVO">
 		SELECT *
-		FROM replyTable
-        WHERE writer = #{user_id}
+		FROM 
+			replyTable
+        WHERE 
+        	writer = #{user_id}
 	</select> 
 
 	
 	<select id="getAllUser" resultType="com.cos.prologstart.domain.user.User">
-		select 
-		 	username,
-	 		password,
-	 		name,
-	 		id,
-	 		email,
-			phone,
-			gender,
-			profileImageUrl,
-			createDate,
-			role
-		
-		from  user   
+		SELECT *
+		FROM  
+			user   
 	</select>
 	
 	<delete id="deleteMember" parameterType="com.cos.prologstart.domain.user.User">
 		DELETE 
-		FROM user 
-        WHERE username = #{username}
+		FROM 
+			user 
+        WHERE 
+        	username = #{username}
 	</delete>
 	
 </mapper>
-

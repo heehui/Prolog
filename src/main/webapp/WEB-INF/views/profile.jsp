@@ -34,26 +34,27 @@
 
                 <c:choose>
                     <c:when test="${dto.pageOwnerState}">
-                        <button class="cta" onclick="location.href='write'">새 글 등록</button>
+                    	<c:if test="${dto.user.username == 'admin_user'}">
+                    		<button class="cta" onclick="location.href='adminWrite'">새 글 등록</button>
+                    	</c:if>
+                    	<c:if test="${dto.user.username != 'admin_user'}">
+                    		      <button class="cta" onclick="location.href='write'">새 글 등록</button>
+                    	</c:if>
                         <button class="cta" onclick="location.href='myReplyList?user_id=${principal.user.username}'">내가 작성한 댓글 보기</button>
                     </c:when>
-                    
+
                 </c:choose>
-   
-						<c:choose>
-							<c:when test="${dto.subscribeState}">
-								<button class="cta blue" onclick="toggleSubscribe(${dto.user.id}, this)">구독취소</button>
-							</c:when>
-							<c:otherwise>
-								<button class="cta" onclick="toggleSubscribe(${dto.user.id}, this)">구독하기</button>
-							</c:otherwise>
-						</c:choose>
-				
-				
-				<button class="modi" onclick="popup('.modal-info')">
-					<i class="fas fa-cog"></i>
-				</button>
-			</div>
+
+                <c:choose>
+                    <c:when test="${dto.pageOwnerState}">
+                        <button class="modi" onclick="popup('.modal-info')">
+                    <i class="fas fa-cog"></i>
+                </button>
+                    </c:when>
+
+                </c:choose>
+
+            </div>
 
 			<div class="subscribe">
 				<ul>
@@ -94,23 +95,29 @@
 							내가 작성한 글 
 						</c:when>
 					<c:otherwise>
-						${dto.user.username}님이 작성한 글
+						${dto.user.username}님의 게시물
 					</c:otherwise>
 				</c:choose> </h2>
-				
-					<table align="center">
-
+	<c:choose>
+		<c:when test="${fn:length(menu) == 0}">
+		<table align="center">
+		<tbody style="width: 50%;">
+			<h4 style="color: gray;">등록된 게시물이 없습니다.</h4>
+		</tbody>
+		</c:when>
+		<c:otherwise>
+		<table align="center">
 			<tbody style="width: 50%">
 			<div id="grid">
 				<c:forEach var="menu" items="${menu}"> 
-		        				
-					<div class='image1'><a href = 'detailView?contents=${menu.contents}&image=${menu.image}&title=${menu.title}&lang=${menu.lang}&num=${menu.num}&date1=${menu.date1}&user_id=${principal.user.username}&writer=${principal.user.username}&hit=${menu.hit}&user_num=${menu.user_num}'>
+					<div class='image1'><a href = 'detailView?contents=${menu.contents}&image=${menu.image}&title=${menu.title}&lang=${menu.lang}&num=${menu.num}&date1=${menu.date1}&user_id=${principal.user.username}&writer=${menu.user_id}&hit=${menu.hit}&user_num=${menu.user_num}'>
 						 <img src='/upload/${menu.image}' width="200" height="200"></a><h6 id='date1'>작성일: ${menu.date1}</h6></div>
 				</c:forEach>
-				
-					
+		
 			 </tbody>
 			 </div>
+		</c:otherwise>
+	</c:choose>	
 			 		<td><button type="button" class="btn btn-info" id="btnUpdate" onclick="history.go(-1)">뒤로가기</button></td>
 					<td><button type="button" class="btn btn-info" id="btnUpdate" onclick="location.href='board'" style="float:right;">목록</button></td><br><br>
 			 </table>
@@ -119,9 +126,7 @@
 			</div>
 			</div>
 
-
 				<!--아이템들end-->
-		
 </section>
 
 <!--로그아웃, 회원정보변경 모달-->
@@ -155,10 +160,6 @@
 		</div>
 
 		<div class="subscribe-list" id="subscribeModalList">
-
-
-
-
 		</div>
 	</div>
 </div>

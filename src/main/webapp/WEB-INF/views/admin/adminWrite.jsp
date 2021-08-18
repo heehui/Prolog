@@ -52,6 +52,7 @@
 				  <textarea class="caption" required="required" name="contents" onkeydown="resize(this)" onkeyup="resize(this)"></textarea>
 				</div>
 				<input type="hidden" name="user_id" value="${principal.user.username}">
+				<input type="hidden" name="user_num" value="${principal.user.id}">
 			    <button type="submit" class="btn btn-primary">발행</button>
 			  </form>
 			</div>

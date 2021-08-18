@@ -7,7 +7,7 @@
 <html lang="en">
 <head>
 <title>게시판</title> <!-- 게시글 상세보기 화면 -->
-<link rel="stylesheet" href="../css/loginboardrview.css">
+<link rel="stylesheet" href="../css/detailView.css">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="js/jquery-3.5.1.js"></script>
@@ -21,9 +21,6 @@
  #back{ float: left;}
  #list{ float: right; }
    
-/*   #contents{
-	white-space:pre-line; /* 수정 */
-	} */
 </style>
 
 
@@ -58,7 +55,7 @@
        </div>
        
       <div class="lang_two">
-         작성자: <a href="/${user_num}?user_id=${writer}" >${writer}</a><br>
+         <a href="/${user_num}?user_id=${writer}"><h5>작성자: ${writer}</h5></a>
          작성일: ${date1}
       </div>
    </div>
@@ -79,7 +76,7 @@
 
             <tr>
                <td id="contents" >
-               <textarea rows="20" cols="100" id="contents" name="contents" readonly style="word-wrap:break-word; white-space: pre-line;">
+               <textarea rows="20" cols="100" id="contents" name="contents" readonly style="word-wrap:break-word; white-space: pre-line; font-size:20pt; ">
                   ${contents}
                </textarea>
                </td>

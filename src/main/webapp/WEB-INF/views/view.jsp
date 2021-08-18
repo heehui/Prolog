@@ -7,7 +7,7 @@
 <html lang="en">
 <head>
 <title>게시판 상세 글</title>
-<link rel="stylesheet" href="../css/loginboardrview.css">
+<link rel="stylesheet" href="../css/detailView.css">
 <meta charset="utf-8"> <!-- 게시글 수정이 완료된 후 보이는 화면 -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
@@ -59,7 +59,7 @@
             <tr>
                <td class="textarea">▶ 작성 내용:</td> </tr>
 			<tr>
-			   <td id = "contents" style='word-break:break-all'><textarea name="contents" cols="100" rows="15" readonly="readonly" wrap="hard">${contents}</textarea>
+			   <td id = "contents" style='word-break:break-all'><textarea name="contents" cols="100" rows="15" readonly="readonly" wrap="hard" >${contents}</textarea>
 			   </td>
 			</tr>
 			    </table>

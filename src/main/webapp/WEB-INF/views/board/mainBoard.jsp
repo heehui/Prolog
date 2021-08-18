@@ -46,8 +46,10 @@ $(document).ready(function() {
         				'&hit=' + item.hit +
         				'&date1=' + item.date1 +
         				'&lang=' + item.lang + "'>" + "<img id='hov1' src='/upload/" + item.image + "' width='200'  height='200'></a><h6 id='date1'>작성일: " + item.date1 
-        						+ '<br><img src="../images/click.png">' + item.hit + ' 댓글수:' + item.reply_cnt + "</h6></div>";
+        						+ '<br><img src="../images/click.png">' + item.hit + "</h6></div>";
+    	  								 											/* ' 댓글수:' + item.reply_cnt */
        })    
+       
        $("#listArea").append(html);
      }});
 } ); 

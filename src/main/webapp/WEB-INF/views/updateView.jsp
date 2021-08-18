@@ -6,7 +6,7 @@
 <html lang="en">
 <head>
 <title></title>
-<link rel="stylesheet" href="../css/loginboardrview.css">
+<link rel="stylesheet" href="../css/detailView.css">
 <meta charset="utf-8"> <!-- 게시글 상세보기에서 수정 버튼 누르면 나오는 화면 -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
@@ -79,7 +79,7 @@
             	 </tr>
 			     <tr>
 			     	<td id = "contents" style='word-break:break-all'>
-			       <textarea name="contents" cols="100" rows="15" wrap="hard">${contents}</textarea></td></tr>
+			       <textarea name="contents" cols="100" rows="15" wrap="hard" >${contents}</textarea></td></tr>
 			   </table>
 			    	<%-- <input type="hidden" name="lang" value="${lang}"> --%>
 			    	<input type="hidden" name="image" value="${image}"> 
