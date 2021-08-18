@@ -17,7 +17,7 @@
 
 ## 3. 프로젝트 상세 내용
 
-![flow_all](https://user-images.githubusercontent.com/78891624/129505514-018217db-5adb-4d0a-a54a-0a05bb7644d8.jpg)
+![0001](https://user-images.githubusercontent.com/78891624/129847746-1121b0d1-f30e-4291-a448-fa34b6cedf96.jpg)
 
  ### 1) 로그인/회원 가입
 - 로그인: 가입 시 입력한 USERNAME 과 PASSWORD 입력하여 로그인이 가능하다.
@@ -265,10 +265,15 @@ public class BoardVO {
 
 ##### 4.3.1 게시물 작성 및 등록
 - 회원의 경우, 메인페이지에서 [개발언어]를 누르면 전체게시판 및 각 개발언어 게시판이 나타난다.
+
+![로그인후-게시판-_online-video-cutter com_](https://user-images.githubusercontent.com/78891624/129853983-2454ae3d-b5ef-4a8b-b9cc-a586aa10deab.gif)
+
 - 회원은 공지사항을 제외하고 모든 게시물을 작성할 권한을 가지고 있다.
 - 게시판 화면에서 오른쪽에 연필모양 버튼을 눌러 게시물을 작성할 수 있다.
 
-![2-게시물등록](https://user-images.githubusercontent.com/78891624/129730501-6916532f-59a4-4c89-a73c-f3647a002f31.gif)
+
+![게시물등록-_online-video-cutter com_](https://user-images.githubusercontent.com/78891624/129854031-a2dbccee-ff8a-4c0c-b77f-e937ebcac96b.gif)
+
 
 1)  write.jsp
 - 게시판 카테고리명, 제목, 이미지, 내용, 회원번호, 회원아이디를 <form>의 post방식을 통해 BoardController1의 writerAfter 로 보낸다.
@@ -408,7 +413,9 @@ public String writeAction(
 - 그렇지않다면, [수정], [삭제] 버튼이 나타나지 않는다.
 
 
-![1-게시판섬네일](https://user-images.githubusercontent.com/78891624/129730534-ae8e69c3-be42-4d54-8ef5-3b3f69406644.gif)
+
+![로그인후-게시판-_online-video-cutter com_](https://user-images.githubusercontent.com/78891624/129853983-2454ae3d-b5ef-4a8b-b9cc-a586aa10deab.gif)
+
 
 
 ###### 4.3.2.1 전체 게시판 조회
@@ -481,6 +488,9 @@ $(document).ready(function() {
 ```
 - 조회수
 ###### - 해당 게시물 섬네일을 클릭할 때마다 조회수가 1씩 증가하도록 한다.
+
+![조회수-_online-video-cutter com_](https://user-images.githubusercontent.com/78891624/129853930-840d0903-6de1-49bf-acf0-18c60f95bd5f.gif)
+
 
 ##### 1. BoardDAO.java
 ###### - 게시물의 글번호(num)을 매개변수로 하는 mapper 메소드를 생성한다.
@@ -603,6 +613,9 @@ public String loginview( HttpServletRequest req, HttpSession session,
 ```
 - 클릭한 게시물의 작성자가 로그인한 회원아이디와 같다면, 게시물을 수정 및 삭제 할 수 있는 권한이 있다.
 - 비회원이나, 로그인한 회원이 해당 게시물 작성자와 다르다면 [수정], [삭제] 버튼이 나타나지 않는다.
+
+![내가쓴 글이 아니면 수정이 안됨-1](https://user-images.githubusercontent.com/78891624/129854096-891ca57c-6abf-4ba2-91c6-a783918406e1.gif)
+
 - [수정]을 누르면 Controller의 updateForm로 이동한다.
 - [삭제]를 누르면 Controller의 delete로 이동한다.
 ```
@@ -625,7 +638,10 @@ public String loginview( HttpServletRequest req, HttpSession session,
                </c:choose>
             </table><br>
 ```
-	
+- 회원이라면 글 작성자를 클릭하여 해당 회원의 프로필 페이지를 볼 수 있다.
+		 
+![작성자-프로필로-이동-_online-video-cutter com_](https://user-images.githubusercontent.com/78891624/129853949-60f3323d-8e5b-4807-bc17-d1208b784ccc.gif)	
+
 ###### 4.3.2.2  java, html, javascript, spring 게시판 조회
 - java, html, javascript, spring 게시판에서 각 개발언어별 게시물이 조회되도록 한다. 
 		
@@ -731,7 +747,9 @@ public String html(@RequestParam("lang")String lang,
 - 게시물 작성자가 로그인한 회원과 같다면 detailView.jsp에 [수정]버튼이 나타난다.
 - [수정]을 누르면 다음과 같이 Controller의 updateForm로 이동하여 수정할 수 있는 페이지(updateView.jsp)로 이동하게 된다.
 
-![3-게시물 수정](https://user-images.githubusercontent.com/78891624/129730550-77d4db2f-08ee-46c0-bd69-b5f1db48ba4f.gif)
+
+![게시물수정-_online-video-cutter com_](https://user-images.githubusercontent.com/78891624/129853993-b6afcdb3-c41c-4bd8-a40c-27f1daadbb75.gif)
+
 
 - BoardController1.java
 ```	
@@ -815,6 +833,7 @@ public String updateForm( @RequestParam("num")int num,
 </html>
 
 ```
+
 2) BoardDAO.java
 - 글번호, 카테고리명, 제목, 이미지, 내용 값을 매개변수로 하는 mapper 메소드를 생성한다.
 ```
@@ -917,7 +936,8 @@ public int updateclear(int num, String lang,String title,String image, String co
 4.3.4 게시물 삭제
 - 게시물 작성자가 로그인한 회원과 같다면 detailView.jsp에 [삭제]버튼이 나타난다.
 - [삭제]를 누르면 Controller의 delete로 이동한다.
-		 
+
+
 1) BoardDAO.java
 - 글번호(num)를 매개변수로 하는 mapper 메소드를 생성한다.
 ```
@@ -956,7 +976,10 @@ public int deleteBoard(int num) {
 - 로그인한 상태에서 layout/header.jsp의 [PROFILE]을 누르면 로그인한 회원의 프로필페이지가 나타난다.
 - 로그인한 회원이 작성했던 게시물을 게시판 화면과 동일하게 섬네일 형태로 볼 수 있다.
 - 내가 작성한 댓글보기를 누르면 로그인한 회원이 작성했던 댓글을 하번에 모아볼 수 있는 replyList.jsp 로 이동하게 된다.
-		 
+
+
+
+
 1) BoardDAO.java
 - session에 저장된 회원아이디를 매개변수로 하는 mapper 메소드를 생성한다.
 ```
@@ -1042,6 +1065,9 @@ public class UserController {
 ```
 - [새 글 등록] : 게시판에서 글을 작성한 방식과 동일하게 BoardController1의 write로 이동하여 글을 작성할 수 있다.
 - [내가 작성한 댓글 보기]: 내가 작성한 댓글 리스트 화면인 replyList.jsp로 이동한다.
+
+![내가쓴-댓글보기-_online-video-cutter com_](https://user-images.githubusercontent.com/78891624/129854012-e5859652-f83a-499c-82a3-b06ab8eb29ee.gif)
+
 ``` 
 <c:choose>
                 <c:when test="${dto.pageOwnerState}">
@@ -1083,6 +1109,9 @@ public class ReplyVO {
 ```
 
 4.4.1 댓글 작성
+
+![댓글-작성_수정_-삭제-1](https://user-images.githubusercontent.com/78891624/129854054-d1856b2c-dfd9-4a15-93c7-0a0fdaf370e0.gif)
+
 1) BoardDAO.java
 - detailView.jsp 하단의 댓글창에 댓글을 작성하면 해당 게시물 글번호(num), 로그인하여 댓글을 작성한 회원아이디(writer), 댓글 내용(content)을 매개변수로 하는 mapper 메소드를 생성한다.
 ```
@@ -1178,6 +1207,9 @@ public String replyWrite(@RequestParam("num")int num,
       <%@ include file="../views/layout/footer.jsp"%>
 ```
 4.4.3 댓글 수정
+
+![댓글-작성_수정_-삭제-2](https://user-images.githubusercontent.com/78891624/129854073-4cffef34-d32a-4b77-8e69-2dd485d85011.gif)
+
 1) BoardDAO.java
 - 댓글번호, 댓글 내용을 매개변수로 하는 mapper 메소드를 생성한다.
 ```
@@ -1289,8 +1321,13 @@ public String delete(@RequestParam("num")int num) throws Exception {
 - [관리자페이지]를 누르면 관리자 메인페이지로 이동하게 된다.
 - 관리자 메인페이지에 [회원게시판],[회원강제 탈퇴],[공지사항] 3개의 버튼이 나타난다.
 	     
+![관리자-회원게시판이동1](https://user-images.githubusercontent.com/78891624/129847905-f112199a-f99d-4f68-8348-ed2f71464e4d.gif)
+
 4.5.1 전체 회원 정보 조회
 - [회원강제탈퇴]를 누르면, 회원 전체 정보 조회와 회원 아이디를 누르면 하이퍼링크로 해당 회원이 작성한 글을 프로필 페이지 형태로 조회할 수 있다.
+	      
+![관리자-회원관리 (online-video-cutter com)](https://user-images.githubusercontent.com/78891624/129847852-b87ebd90-b477-48a3-b52c-1d9651954cba.gif)
+
 1)BoardDAO.java
 ```
 public ArrayList<UserUpdateDto> getAllUser();
@@ -1351,6 +1388,7 @@ public String userList(Model model1) {
 	 	
 4.5.2  회원 강제 탈퇴
 - 위의 내용에 이어서, 회원들이 작성한 게시물을 조회한다.
+
 1)admin/userList.jsp
 ```
 		<td>
@@ -1374,6 +1412,9 @@ public String userList(Model model1) {
 4.5.3  공지사항 작성
 - 관리자 메인페이지에서 [공지사항]을 누르면 notice.jsp로 이동하며 공지사항 작성 권한이 주어진다.
 - 회원들은 작성할 수 없었던 notice 카테고리를 선택하여 글을 작성할 수 있다.
+	
+![관리자-공지사항 (online-video-cutter com)](https://user-images.githubusercontent.com/78891624/129847973-fe75bded-206c-4bf3-bf3e-5ff0ce5a8f3c.gif)
+	      
 1) notice.jsp
 ```	
 <%@ include file="../layout/header2.jsp"%>
@@ -1415,5 +1456,9 @@ public String userList(Model model1) {
 <%@ include file="../layout/footer.jsp"%>
 ```	
 4.5.4  모든 게시물, 댓글 접근 권한(수정, 삭제 권한)
+
+![관리자-수정,삭제권한3-1_Trim](https://user-images.githubusercontent.com/78891624/129847958-bedb06f5-1e1d-4f18-bb37-b5fe33dcaa21.gif)
+![관리자-수정,삭제권한3-2_Trim](https://user-images.githubusercontent.com/78891624/129847936-f2ca1075-0552-46b4-962a-55a37064b90a.gif)
+
 
 
