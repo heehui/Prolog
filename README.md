@@ -68,12 +68,12 @@
 - 게시판 테이블(boardTable2)
 - 댓글 테이블(replyTable)
 
-### [2) 환경설정](#1-db-테이블-쿼리문)
+### [4.2 환경설정 ](#42-환경설정)
 - pom.xml
 - application.yml(포트번호, jsp적용, MariaDB 연동)
 - application.properties (mybatisMapper.xml과 DAO 연결)
 
-### 4.3 게시판 기능
+### [4.3 게시판 기능 ](#43-게시판-기능)
 - 게시물 작성 및 등록
 - 게시물 조회
 - 게시물 수정
@@ -138,7 +138,7 @@ CREATE TABLE `replytable` (
 
 #
 
-#### 2. 환경설정
+#### 4.2 환경설정
 1) pom.xml
 - JSP 
 ###### - JSP가 컴파일이 가능하도록 한다.
