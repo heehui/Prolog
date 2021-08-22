@@ -62,13 +62,13 @@
 
 ## 4. 프로젝트 설명
 
-### [1) DB 쿼리문](#1-db-테이블-쿼리문)
+### [4.1 DB 쿼리문](#41-db-테이블-쿼리문)
 
 - pro 권한 부여 
 - 게시판 테이블(boardTable2)
 - 댓글 테이블(replyTable)
 
-### 4.2 환경설정
+### [2) 환경설정](#1-db-테이블-쿼리문)
 - pom.xml
 - application.yml(포트번호, jsp적용, MariaDB 연동)
 - application.properties (mybatisMapper.xml과 DAO 연결)
@@ -94,7 +94,7 @@
 
 #
 
-#### 1. DB 테이블 쿼리문
+#### 4.1 DB 테이블 쿼리문
 
  - pro 권한 주기
 ###### - MariaDB의 사용자를 root에서 'pro'로, 패스워드를 'pro1234'로 팀원들과 동일한 아이디와 패스워드를 갖도록 권한을 부여한다.
@@ -138,7 +138,7 @@ CREATE TABLE `replytable` (
 
 #
 
-#### 4.2 환경설정
+#### 2. 환경설정
 1) pom.xml
 - JSP 
 ###### - JSP가 컴파일이 가능하도록 한다.
