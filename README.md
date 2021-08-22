@@ -1,6 +1,6 @@
 
 # Spring boot와 Mybatis, JPA, MariaDB로 만든 '공유블로그 Prolog'
-#### - 제가 맡은 게시판, 댓글, 관리자 기능 파트에 대해 작성했습니다. 
+#### - 제가 맡은 게시판, 댓글, 관리자 기능 파트를 위주로 작성했습니다. 
 ---
 ## 1. 프로젝트 개요 
 - 공통 관심사를 가진 사람들이 모여 정보를 나누는 것이 보편화된 시대에 맞게 프로그래밍에 관심을 가진 사람들이 모여 정보를 공유할 수 있는 공간이다.
@@ -56,14 +56,14 @@
 
 #
 
-
-![1-게시판섬네일](https://user-images.githubusercontent.com/78891624/129730534-ae8e69c3-be42-4d54-8ef5-3b3f69406644.gif)
-
+<p align="center">
+<img src="https://user-images.githubusercontent.com/78891624/129853983-2454ae3d-b5ef-4a8b-b9cc-a586aa10deab.gif" width="850" height="500"/>
+</p>
 
 ## 4. 프로젝트 설명
 
-### 4.1 DB 쿼리문
-- pro 권한 부여
+###  [1) DB 쿼리문](#db-테이블-쿼리문)
+- pro 권한 부여 
 - 게시판 테이블(boardTable2)
 - 댓글 테이블(replyTable)
 
@@ -93,7 +93,7 @@
 
 #
 
-#### 4.1 DB 테이블 쿼리문
+#### DB 테이블 쿼리문
 
  - pro 권한 주기
 ###### - MariaDB의 사용자를 root에서 'pro'로, 패스워드를 'pro1234'로 팀원들과 동일한 아이디와 패스워드를 갖도록 권한을 부여한다.
@@ -134,6 +134,8 @@ CREATE TABLE `replytable` (
 	CONSTRAINT `FK_replytable_boardtable2` FOREIGN KEY (`num`) REFERENCES `prolog`.`boardtable2` (`num`) ON UPDATE NO ACTION ON DELETE CASCADE
 );
 ```
+
+#
 
 #### 4.2 환경설정
 1) pom.xml
@@ -239,14 +241,16 @@ mybatis.mapper-locations=classpath:mapper/**/**.xml
 ```
 
 
+#
+
 #### 4.3 게시판 기능
 
-- spring boot에서 다음과 같은 흐름으로 웹페이지가 실행된다.
+- Spring boot에서 다음과 같은 흐름으로 웹페이지가 실행된다.
+
 ![0001 (2)](https://user-images.githubusercontent.com/78891624/129710374-38c179bb-eb64-45a5-94a4-f8f72ecc15cc.jpg)
 
-
 - BoardVO.java
-###### - lombok을 이용하여 @Data로 각 변수값의 setter, getter 등을 자동으로 생성시켜준다.
+###### - lombok을 이용하여 @Data annotation으로 각 변수값의 setter, getter 등을 자동으로 생성시켜준다.
 ###### - 회원아이디, 글번호, 게시판 카테고리명, 제목, 내용, 이미지, 작성일, 조회수 변수 생성
 ```
 @Data
@@ -265,15 +269,13 @@ public class BoardVO {
 
 ##### 4.3.1 게시물 작성 및 등록
 - 회원의 경우, 메인페이지에서 [개발언어]를 누르면 전체게시판 및 각 개발언어 게시판이 나타난다.
-
-![로그인후-게시판-_online-video-cutter com_](https://user-images.githubusercontent.com/78891624/129853983-2454ae3d-b5ef-4a8b-b9cc-a586aa10deab.gif)
-
 - 회원은 공지사항을 제외하고 모든 게시물을 작성할 권한을 가지고 있다.
-- 게시판 화면에서 오른쪽에 연필모양 버튼을 눌러 게시물을 작성할 수 있다.
+- 게시판 화면에서 오른쪽에 <img src="https://user-images.githubusercontent.com/78891624/130184068-8751dc3e-5d3b-4466-b01a-99f77cea28cc.PNG" width="30" height="30"/> 을 눌러 게시물을 작성할 수 있다.
 
 
-![게시물등록-_online-video-cutter com_](https://user-images.githubusercontent.com/78891624/129854031-a2dbccee-ff8a-4c0c-b77f-e937ebcac96b.gif)
-
+<p align="center">
+<img src="https://user-images.githubusercontent.com/78891624/129854031-a2dbccee-ff8a-4c0c-b77f-e937ebcac96b.gif" width="850" height="500"/>
+</p>
 
 1)  write.jsp
 - 게시판 카테고리명, 제목, 이미지, 내용, 회원번호, 회원아이디를 <form>의 post방식을 통해 BoardController1의 writerAfter 로 보낸다.
@@ -369,13 +371,13 @@ public class BoardController1 {
 	}
 ```
 
-###### - 글쓰기 페이지에서 java, javascript, spring, html 중 원하는 개발언어 게시판 카테고리를 콤보박스로 선택한다.
-###### - 제목, 이미지 첨부, 내용을 입력한 후 [발행]을 누르면 BoardController1의 writeAfter 로 이동한다.
-###### - 입력한 값들을 @RequestParam을 통해 파라미터로 가져오고, user_id(회원아이디)는 session에 저장되도록 한다.
-###### - 첨부한 이미지는 이미지가 저장될 외부 경로 path를 지정한 후 이미지파일의 이름을 가져올 수 있도록 한다.
-###### - 게시물의 내용은 개행도 적용될 수 있도록 replace를 이용하여 enter(즉, \r\n)를 br 태그로 db에 저장되도록 한다.
-###### - BoardService1에서 생성한 addBoard를 불러와 각 파라미터값들을 넣어 insert되도록 한다.
-###### - 게시물을 등록하면 전체 게시판 화면으로 넘어갈 수 있도록 return 해준다.
+- 글쓰기 페이지에서 java, javascript, spring, html 중 원하는 개발언어 게시판 카테고리를 콤보박스로 선택한다.
+- 제목, 이미지 첨부, 내용을 입력한 후 [발행]을 누르면 BoardController1의 writeAfter 로 이동한다.
+- 입력한 값들을 @RequestParam을 통해 파라미터로 가져오고, user_id(회원아이디)는 session에 저장되도록 한다.
+- 첨부한 이미지는 이미지가 저장될 외부 경로 path를 지정한 후 이미지파일의 이름을 가져올 수 있도록 한다.
+- 게시물의 내용은 개행도 적용될 수 있도록 replace를 이용하여 enter(즉, \r\n)를 br 태그로 db에 저장되도록 한다.
+- BoardService1에서 생성한 addBoard를 불러와 각 파라미터값들을 넣어 insert되도록 한다.
+- 게시물을 등록하면 전체 게시판 화면으로 넘어갈 수 있도록 return 해준다.
  
 ```
 @PostMapping("/writeAfter")
@@ -413,9 +415,9 @@ public String writeAction(
 - 그렇지않다면, [수정], [삭제] 버튼이 나타나지 않는다.
 
 
-
-![로그인후-게시판-_online-video-cutter com_](https://user-images.githubusercontent.com/78891624/129853983-2454ae3d-b5ef-4a8b-b9cc-a586aa10deab.gif)
-
+<p align="center">
+<img src="https://user-images.githubusercontent.com/78891624/129853983-2454ae3d-b5ef-4a8b-b9cc-a586aa10deab.gif" width="850" height="500"/>
+</p>
 
 
 ###### 4.3.2.1 전체 게시판 조회
@@ -489,8 +491,9 @@ $(document).ready(function() {
 - 조회수
 ###### - 해당 게시물 섬네일을 클릭할 때마다 조회수가 1씩 증가하도록 한다.
 
-![조회수-_online-video-cutter com_](https://user-images.githubusercontent.com/78891624/129853930-840d0903-6de1-49bf-acf0-18c60f95bd5f.gif)
-
+<p align="center">
+<img src="https://user-images.githubusercontent.com/78891624/129853930-840d0903-6de1-49bf-acf0-18c60f95bd5f.gif" width="850" height="500"/>
+</p>
 
 ##### 1. BoardDAO.java
 ###### - 게시물의 글번호(num)을 매개변수로 하는 mapper 메소드를 생성한다.
@@ -1091,8 +1094,11 @@ public class UserController {
 		 </div>
 			<td><button type="button" class="btn btn-info" id="btnUpdate" onclick="history.go(-1)">뒤로가기</button></td>
 			<td><button type="button" class="btn btn-info" id="btnUpdate" onclick="location.href='board'" style="float:right;">목록</button></td>
-	</table>			
+	</table>
 ```
+
+#
+
 4.4 댓글 기능
 - ReplyVO.java
 ###### - lombok을 이용하여 @Data로 각 변수값의 setter, getter 등을 자동으로 생성시켜준다.
@@ -1316,6 +1322,9 @@ public String delete(@RequestParam("num")int num) throws Exception {
 	return "board/mainBoard";
  }
 ```
+
+#
+
 4.5 관리자 기능
 - 로그인 페이지에서 admin_user의 아이디로 로그인하면 메인페이지에 관리자페이지 버튼이 생성된다.
 - [관리자페이지]를 누르면 관리자 메인페이지로 이동하게 된다.
