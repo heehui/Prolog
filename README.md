@@ -74,6 +74,9 @@
 - 게시물 수정
 - 게시물 삭제
 - 프로필페이지
+- 회원프로필 목록(추가로 작성함)***
+- 게시물 검색(추가로 작성함)***
+- 인기글 조회(추가로 작성함)***
 
 ### [4.4 댓글 기능 ](#44-댓글-기능)
 - 댓글 작성
@@ -256,7 +259,8 @@ mybatis.mapper-locations=classpath:mapper/**/**.xml
 
 - BoardVO.java
 ###### - lombok을 이용하여 @Data annotation으로 각 변수값의 setter, getter 등을 자동생성 해준다.
-###### - boardTable2 DB테이블의 칼럼명과 동일하게 USER 아이디, 글번호, 게시판 카테고리명, 제목, 내용, 첨부 이미지, 작성일, 조회수 변수를 생성해준다.
+###### - boardTable2 DB테이블의 칼럼명과 동일하게 USER 아이디, 글번호, 게시판 카테고리명, 제목, 내용, 첨부 이미지, 작성일, 조회수 변수를 생성한다.
+###### - (**추가작성**) 게시물 검색기능을 위한 type (ex: 제목, 내용, 작성)과 키워드(keyword)에 대한 변수를 생성한다. 
 ```
 @Data
 public class BoardVO {
@@ -269,6 +273,9 @@ public class BoardVO {
 	private String image; //이미지
 	private String date1; //작성일
 	private int hit; //조회수
+	
+	private String type; 
+	private String keyword;
 }
 ```
 
@@ -1119,6 +1126,244 @@ public class UserController {
 </header>
 ```
 
+	
+#### 4.3.6 회원프로필 목록(추가로 작성함)***
+- 회원의 경우, 모두 현재 블로그에 등록되었는 회원들 프로필 페이지를 확인할 수 있다.
+- 비회원은 이용할 수 없다.	
+- 프로필 페이지에서 각 회원이 작성한 게시물을 볼 수 있다.
+
+#### 1) profileList.jsp
+- 블로그에 등록되었는 회원들을 리스트 형태로 확인할 수 있다.
+- 프로필 이미지를 클릭하면 해당 회원들 프로필 페이지로 이동한다.
+- 게시판에서 상세페이지로 게시물을 보는 것과 동일한 형태로 프로필페이지의 글도 읽을 수 있다. (detailView.jsp로 이동)
+```
+ <%@ include file="../layout/header2.jsp"%><br>
+ 	<h1>회원 프로필 리스트</h1>
+		<hr>	
+		<table align="center">
+			<tbody style="width: 50%">
+			<div id="grid">
+			<c:forEach var="board" items="${menu}">
+					<div id="total_btn2"><a href="/${board.id}?user_id=${board.username}">
+					<img src="/upload/${board.profileImageUrl}" onError="this.src='/images/none.png'" width="200" height="200"/></a></div>
+			</c:forEach>	
+			 </div>
+			 	<button type="button" class="btn btn-info" id="btnUpdate" onclick="history.go(-1)">뒤로가기</button>	
+			 </table>
+	
+  <%@ include file="../layout/footer.jsp"%>
+
+```
+
+#### 4.3.7 게시물 검색(추가로 작성함)***	
+- 메인페이지 오른쪽에 검색하고 싶은 타입(제목, 내용, 작성자)을 콤보박스로 선택한 후 검색하고자하는 단어를 입력한다.
+- 그러면 해당 단어를 포함하는 게시물만 검색되어 검색페이지에 나타난다.
+	  
+#### 1) search.jsp
+- 게시판 화면과 같이 동일한 grid 형태로 검색된 게시물이 조회된다.
+```
+ 	<h1>검색한 게시물</h1>
+		<hr>
+		<table align="center">
+		<tbody style="width: 50%">
+		 <div id="grid">
+		  <c:choose>
+			<c:when test="${principal.user.username == null}">
+			<c:forEach var="imsi" items="${menu}"> 
+		
+				<div class='image1'><a href = 'detailView?contents=${imsi.contents}&image=${imsi.image}&title=${imsi.title}&lang=${imsi.lang}&num=${imsi.num}
+				&date1=${imsi.date1}&writer=${imsi.user_id}&hit=${imsi.hit}&user_num=${imsi.user_num}'>
+				<img id='hov1' src='/upload/${imsi.image}' width="200" height="200"></a><h6 id='date1'>작성일: ${imsi.date1}<br>
+				<img src="../images/click.png"> ${imsi.hit}</h6></div>
+			</c:forEach>
+			</c:when>
+			<c:otherwise>
+			<c:forEach var="imsi" items="${menu}"> 	
+		
+				<div class='image1'><a href = 'detailView?contents=${imsi.contents}&image=${imsi.image}&title=${imsi.title}&lang=${imsi.lang}&num=${imsi.num}
+				&date1=${imsi.date1}&user_id=${principal.user.username}&writer=${imsi.user_id}&hit=${imsi.hit}&user_num=${imsi.user_num}'>
+				<img src='/upload/${imsi.image}' width="200" height="200"></a><h6 id='date1'>작성일: ${imsi.date1}<br>
+				<img src="../images/click.png"> ${imsi.hit}</h6></div>
+			</c:forEach>
+			</c:otherwise>
+		</c:choose>		
+		 </tbody>
+		  </div>
+			 <button type="button" class="btn btn-info" id="btnUpdate" onclick="history.go(-1)">뒤로가기</button>	
+		</table>		
+		</div>
+		</div>
+		</div>
+```
+
+#### 2) BoardDAO.java
+- type과 keyword를 매개변수로 하는 mapper 메소드를 생성한다.
+```
+public List<BoardVO> getSearchList(String type, String keyword)throws Exception;
+```
+
+#### 3) BoardService1.java
+- Service에서는 MyBatis의 getSearchList로 실행시킨 데이터를 Controller로 보낸다.
+```
+public List<BoardVO> getSearchList(String type, String keyword)throws Exception{
+	return bdao.getSearchList(type, keyword);
+}
+```
+
+#### 4)mybatismapper.xml
+- <choose>와 <when>을 이용하여 조건문을 작성한다.
+- type이 null이 아니고 'title' 이면, 검색 키워드로 입력한 keyword의 값이 title(제목)에 포함된 모든 게시물의 정보를 조회한다.
+- type이 null이 아니고 'contents' 이면, 검색 키워드로 입력한 keyword의 값이 contents(내용)에 포함된 모든 게시물의 정보를 조회한다.
+- type이 null이 아니고 'writer' 이면, 검색 키워드로 입력한 keyword의 값과 같은 user_id(해당 게시물을 작성한 USER 아이디)의 게시물 정보를 조회한다.
+```
+<select id="getSearchList" resultType="com.cos.prologstart.vo.BoardVO">
+	SELECT 
+		user_id, user_num, num, lang, title, contents, image, DATE_FORMAT(date1, '%Y-%m-%d %T') as 'date1', hit, reply_cnt
+	FROM  
+		boardTable2
+	WHERE 
+	<choose>
+		<when test="type !=null and type.equals('title')">
+			title LIKE CONCAT('%', #{keyword},'%')
+		</when>
+		<when test="type !=null and type.equals('contents')">
+			contents LIKE CONCAT('%', #{keyword},'%')
+		</when>
+		<when test="type !=null and type.equals('writer')">
+			user_id = #{keyword}
+		</when>
+	</choose> 
+</select>
+```
+
+#### 5) BoardController1.java
+- 메인페이지나 각 게시판의 검색입력창에 검색하고자하는 타입과 글자를 입력한 후 [검색]을 누르면 해당 Controller로 이동한다. 
+- type과 keyword 중 하나라도 빈칸으로 [검색]되면 전체게시판 화면으로 이동하게 된다.
+- 정상적으롱 입력된다면, Model로 검색하고자하는 게시물을 리스트형태로 보낸다.  
+
+```
+@GetMapping("/getSearchList")
+private String getSearchList(@RequestParam("type")String type,
+			     @RequestParam("keyword")String keyword,
+			     Model model1)throws Exception {
+		
+ 	 if(type.equals("") || keyword.equals("")) { return "board/mainBoard"; }
+		
+	model1.addAttribute("menu",bs.getSearchList(type,keyword));
+		
+	return "board/search";
+}
+```
+- 각 게시판 화면에서도 검색기능을 이용할 수 있도록 콤보박스와 입력창을 추가 작성한다.
+- 수정된 header2.jsp는 다음과 같다.
+```
+<div class="container" style="margin-top: 30px">
+	<div class="row">
+		<div class="col-sm-12">
+				
+		<table id="example" class="display" style="width: 50%">
+				
+				...(생략)
+ 		
+		<form action="getSearchList" method="get">
+			<select name="type">
+			 <option selected="selected" value="">선택</option>
+			 <option value="title">제목</option>
+			 <option value="contents">내용</option>
+			 <option value="writer">작성자</option>
+			</select>
+			<input id="input2" type="text" name="keyword">
+			<input id="input3" type="submit" value="검색">
+		</form> 	
+	</div>		
+```
+#### 4.3.8 인기글 조회(추가로 작성함)***	
+- 메인페이지에서 [개발언어] 밑에 [인기글]을 클릭하면, 조회수가 20이 넘는 게시물만 조회된다.
+			
+#### 1) popularList.jsp
+- 게시판 화면과 같이 동일한 grid 형태로 검색된 게시물이 조회된다.
+```
+<h1>인기글</h1>
+	<hr>
+ 	<c:choose>
+ 		<c:when test="${principal.user.username != null}">
+ 		<div align="right"><a href="write?user_id=${principal.user.username}"><button type="button" class="btn btn-info" id="writeBtn">
+		<img src="../images/pencil.png" width="30"></button></a></div>
+		</c:when>
+	</c:choose>		
+	</table>
+		<br>
+	<table align="center">
+		<tbody style="width: 50%">
+		  <div id="grid">
+		    <c:choose>
+			<c:when test="${principal.user.username == null}"
+			<c:forEach var="imsi" items="${menu}"> 
+				
+		        <div class='image1'><a href = 'detailView?contents=${imsi.contents}&image=${imsi.image}&title=${imsi.title}&lang=${imsi.lang}&num=${imsi.num}
+			&date1=${imsi.date1}&writer=${imsi.user_id}&hit=${imsi.hit}&user_num=${imsi.user_num}'>
+			<img id='hov1' src='/upload/${imsi.image}' width="200" height="200"></a><h6 id='date1'>작성일: ${imsi.date1}<br>
+			<img src="../images/click.png"> ${imsi.hit}</h6></div>
+			</c:forEach>
+			</c:when>
+			
+			<c:otherwise>
+				<c:forEach var="imsi" items="${menu}"> 
+		        				
+				<div class='image1'><a href = 'detailView?contents=${imsi.contents}&image=${imsi.image}&title=${imsi.title}&lang=${imsi.lang}&num=${imsi.num}
+				&date1=${imsi.date1}&user_id=${principal.user.username}&writer=${imsi.user_id}&hit=${imsi.hit}&user_num=${imsi.user_num}'>
+				<img src='/upload/${imsi.image}' width="200" height="200"></a><h6 id='date1'>작성일: ${imsi.date1}<br>
+				<img src="../images/click.png"> ${imsi.hit}</h6></div>
+				</c:forEach>
+			</c:otherwise>
+		    </c:choose>		
+		      </tbody>
+			</div>
+			 	<button type="button" class="btn btn-info" id="btnUpdate" onclick="history.go(-1)">뒤로가기</button>	
+	</table>			
+
+```
+
+#### 2) BoardDAO.java
+- List 컬렉션을 이용하여 인기를을 조회하는 mapper 메소드를 생성한다.
+```
+public List<BoardVO> getPopularList(); 
+```
+
+#### 3) BoardService1.java
+- Service에서는 MyBatis의 getPopularList로 실행시킨 데이터를 Controller로 보낸다.
+```
+public List<BoardVO> getPopularList(){
+	return bdao.getPopularList();
+}
+```
+
+#### 4)mybatismapper.xml
+- hit(조회수)가 20 이상인 게시물에 한하여 모두 조회될 수 있도록 조건문을 작성한다.
+```
+<select id="getPopularList" resultType="com.cos.prologstart.vo.BoardVO">
+	SELECT
+		user_id, user_num, num, lang, title, contents, image, DATE_FORMAT(date1, '%Y-%m-%d %T') as 'date1', hit, reply_cnt
+	FROM
+		boardTable2
+	WHERE
+		hit >= 20
+</select>
+```
+
+#### 5) BoardController1.java
+- 메인페이지에서 [개발언어] 밑에 [인기글]을 클릭하면, 해당 Controller로 이동한다.
+- Service의 getPopularList()을 실행시켜 Model로 값을 넘긴다.  
+
+```
+@GetMapping("/getPopularList")
+private String getPopularList(Model model1)throws Exception {
+		
+	model1.addAttribute("menu",bs.getPopularList());
+		
+	return "board/popular";
+}
+```
 #
 
 ### 4.4 댓글 기능
