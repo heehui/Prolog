@@ -181,4 +181,32 @@
         	username = #{username}
 	</delete>
 	
+	<select id="getSearchList" resultType="com.cos.prologstart.vo.BoardVO">
+		SELECT 
+			user_id, user_num, num, lang, title, contents, image, DATE_FORMAT(date1, '%Y-%m-%d %T') as 'date1', hit, reply_cnt
+		FROM  
+			boardTable2
+		WHERE 
+		<choose>
+			<when test="type !=null and type.equals('title')">
+				title LIKE CONCAT('%', #{keyword},'%')
+			</when>
+			<when test="type !=null and type.equals('contents')">
+				contents LIKE CONCAT('%', #{keyword},'%')
+			</when>
+			<when test="type !=null and type.equals('writer')">
+				user_id = #{keyword}
+			</when>
+		</choose> 
+	</select>
+	
+	<select id="getPopularList" resultType="com.cos.prologstart.vo.BoardVO">
+		SELECT
+			user_id, user_num, num, lang, title, contents, image, DATE_FORMAT(date1, '%Y-%m-%d %T') as 'date1', hit, reply_cnt
+		FROM
+			boardTable2
+		WHERE
+			hit >= 20
+	</select>
+
 </mapper>

@@ -113,6 +113,19 @@ input button {
 
 }
 
+#select1{
+	
+	font-family: 'GongGothicBold'; 
+	width:80px;
+	height:30px;
+	font-size:14px;
+	background-color:#FFF;
+	border:1px solid #FFC045;
+	margin:3px;
+	margin-top: 350px;
+	float: right;
+
+}
 
 #nav {
 	padding : 30px;

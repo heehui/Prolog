@@ -59,8 +59,38 @@ public class BoardController1 {
 		return "admin/adminWrite";
 	}
 	
+	@GetMapping("/getSearchList")
+	private String getSearchList(@RequestParam("type")String type,
+								 @RequestParam("keyword")String keyword,
+								 Model model1)throws Exception {
+		
+		 if(type.equals("") || keyword.equals("")) { return "board/mainBoard"; }
+		
+		model1.addAttribute("menu",bs.getSearchList(type,keyword));
+		
+		return "board/search";
+	}
+	
+	
+	@GetMapping("board/profileList")
+	public String profileList( Model model1) {
+		
+		model1.addAttribute("menu", bs.getAllUser());
+		
+		return "/board/profileList";
+	}
+	
+	@GetMapping("/getPopularList")
+	private String getPopularList(Model model1)throws Exception {
+		
+		model1.addAttribute("menu",bs.getPopularList());
+		
+		return "board/popular";
+	}
+
+	
 	@GetMapping("/detailView") //게시글 상세보기를 누르면 보이는 화면
-	public String loginview(
+	public String detailView(
 			HttpServletRequest req, HttpSession session,
 			 		   @RequestParam("num")int num,
 					   @RequestParam("title")String title,

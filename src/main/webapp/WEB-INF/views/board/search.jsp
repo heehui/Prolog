@@ -15,32 +15,22 @@
 </head>
 <body>
  	<%@ include file="../layout/header2.jsp"%>
- 	<h1>검색 게시판</h1>
+ 	<h1>검색한 게시물</h1>
 		<hr>
- 			<c:choose>
- 				<c:when test="${principal.user.username != null}">
- 						<div align="right"><a href="write?user_id=${principal.user.username}"><button type="button" class="btn btn-info" id="writeBtn"><img src="../images/pencil.png" width="30"></button></a></div>
-				</c:when>
-			</c:choose>		
-					</table>
-					<br>
-					<table align="center">
-
+		<table align="center">
 			<tbody style="width: 50%">
 			<div id="grid">
 			<c:choose>
 			<c:when test="${principal.user.username == null}">
-			
 			<c:forEach var="imsi" items="${menu}"> 
-		        				
+			
 					<div class='image1'><a href = 'detailView?contents=${imsi.contents}&image=${imsi.image}&title=${imsi.title}&lang=${imsi.lang}&num=${imsi.num}&date1=${imsi.date1}&writer=${imsi.user_id}&hit=${imsi.hit}&user_num=${imsi.user_num}'>
 						 <img id='hov1' src='/upload/${imsi.image}' width="200" height="200"></a><h6 id='date1'>작성일: ${imsi.date1}<br><img src="../images/click.png"> ${imsi.hit}</h6></div>
 				</c:forEach>
 			</c:when>
 			<c:otherwise>
-			
 				<c:forEach var="imsi" items="${menu}"> 
-		        				
+		        		
 					<div class='image1'><a href = 'detailView?contents=${imsi.contents}&image=${imsi.image}&title=${imsi.title}&lang=${imsi.lang}&num=${imsi.num}&date1=${imsi.date1}&user_id=${principal.user.username}&writer=${imsi.user_id}&hit=${imsi.hit}&user_num=${imsi.user_num}'>
 						 <img src='/upload/${imsi.image}' width="200" height="200"></a><h6 id='date1'>작성일: ${imsi.date1}<br><img src="../images/click.png"> ${imsi.hit}</h6></div>
 				</c:forEach>
@@ -57,5 +47,3 @@
 	<%@ include file="../layout/footer.jsp"%>
 </body>
 </html>
-
-

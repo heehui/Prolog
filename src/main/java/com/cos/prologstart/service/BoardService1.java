@@ -92,4 +92,11 @@ public class BoardService1 {
 	}
 	
 
+	public List<BoardVO> getSearchList(String type, String keyword)throws Exception{
+		return bdao.getSearchList(type, keyword);
+	}
+	
+	public List<BoardVO> getPopularList(){
+		return bdao.getPopularList();
+	}
 }

@@ -26,18 +26,28 @@
 				bada.style.display = "none";
 			}
 		}
+		
+		
 	</script>
 <body>
 	<div id="container">
 		<div id="container2">
-			<form action="/mainController" method="post">
+			<form action="getSearchList" method="get">
 				<div id="logo">
 					<h1>
 						<a class="a" href="/">Prolog</a>
 					</h1>
-
-					<input id="input3" type="submit" value="검색"> <input
-						id="input2" type="text" name="검색">
+				
+					<input id="input3" type="submit" value="검색"> 
+					<input id="input2" type="text" name="keyword">
+				
+				<select name="type" id="select1">
+				  <option selected="selected" value="">선택</option>
+				  <option value="title">제목</option>
+				  <option value="content">내용</option>
+				  <option value="writer">작성자</option>
+				</select>
+				
 				</div>
 				<div id="nav">
 					<c:choose>
@@ -64,7 +74,7 @@
 					</ul>
 
 					<ul>
-						<a href="/board/popular">˘ 인기글</a>
+						<a href="/getPopularList">˘ 인기글</a>
 
 					</ul>
 				</div>
@@ -74,6 +84,10 @@
 					<img src="/images/sub2.png"> <img src="/images/sub3.jpg">
 				</div>
 			</form>
+			
+			<tbody id="boardtable" style="width: 50%">
+					
+			</tbody>
 		</div>
 	</div>
 	<%@ include file="../views/layout/footer.jsp"%>

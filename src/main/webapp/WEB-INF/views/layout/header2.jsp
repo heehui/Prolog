@@ -38,3 +38,15 @@
 					<a href="html?lang=html&user_id=${member.user_id}"><button id="btn4">html</button></a>
  					<a href="notice?lang=notice&user_id=${member.user_id}"><button id="btn4">공지사항</button></a>
  				</div> <br>
+ 		<div align="right">	
+ 			<form action="getSearchList" method="get">
+				<select name="type">
+				  <option selected="selected" value="">선택</option>
+				  <option value="title">제목</option>
+				  <option value="contents">내용</option>
+				  <option value="writer">작성자</option>
+				</select>
+					<input id="input2" type="text" name="keyword">
+					 <input id="input3" type="submit" value="검색">
+			</form> 	
+		</div>	

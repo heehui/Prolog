@@ -16,6 +16,9 @@ public class BoardVO {
 	private int hit; //조회수
 	private int reply_cnt; //댓글 개수
 	
+	private String type;
+	private String keyword;
+	
 	public BoardVO() {}
 	
 	public BoardVO(String user_id,int user_num,int num, String lang, String title,String contents,String image) {
