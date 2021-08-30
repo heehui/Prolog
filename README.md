@@ -257,6 +257,7 @@ mybatis.mapper-locations=classpath:mapper/**/**.xml
 
 ![0001 (2)](https://user-images.githubusercontent.com/78891624/129710374-38c179bb-eb64-45a5-94a4-f8f72ecc15cc.jpg)
 
+
 - BoardVO.java
 ###### - lombok을 이용하여 @Data annotation으로 각 변수값의 setter, getter 등을 자동생성 해준다.
 ###### - boardTable2 DB테이블의 칼럼명과 동일하게 USER 아이디, 글번호, 게시판 카테고리명, 제목, 내용, 첨부 이미지, 작성일, 조회수 변수를 생성한다.
@@ -284,9 +285,10 @@ public class BoardVO {
 - 회원은 공지사항을 제외한 모든 게시물을 작성할 권한을 가지고 있다.
 - 게시판 화면에서 오른쪽에 <img src="https://user-images.githubusercontent.com/78891624/130184068-8751dc3e-5d3b-4466-b01a-99f77cea28cc.PNG" width="30" height="30"/> 을 눌러 게시물을 작성할 수 있다.
 
-<p align="center">
-<img src="https://user-images.githubusercontent.com/78891624/129854031-a2dbccee-ff8a-4c0c-b77f-e937ebcac96b.gif" width="850" height="500"/>
-</p>
+
+|게시물 작성 및 등록|
+|:-:|
+|![게시물 작성 및 등록](https://user-images.githubusercontent.com/78891624/129854031-a2dbccee-ff8a-4c0c-b77f-e937ebcac96b.gif?h=750&w=1260)|	
 
 #### 1)  write.jsp
 - 게시판 카테고리명, 제목, 이미지, 내용, USER 번호, USER 아이디를 <form>의 post방식으로 BoardController1의 writerAfter 로 보낸다.
@@ -441,9 +443,9 @@ public String writeAction(
 - 그렇지않다면, [수정], [삭제] 버튼이 나타나지 않는다.
 
 
-<p align="center">
-<img src="https://user-images.githubusercontent.com/78891624/129853983-2454ae3d-b5ef-4a8b-b9cc-a586aa10deab.gif" width="850" height="500"/>
-</p>
+|게시물 조회|
+|:-:|
+|![게시물 조회](https://user-images.githubusercontent.com/78891624/129853983-2454ae3d-b5ef-4a8b-b9cc-a586aa10deab.gif?h=850&w=1260)|	
 
 #### 4.3.2.1 전체 게시판 조회
 
@@ -518,11 +520,11 @@ public List<BoardVO> getAllBoard(){
 ```
 	
 - 조회수
-###### - 해당 게시물 섬네일을 클릭할 때마다 조회수가 1씩 증가하도록 한다.
+###### - 해당 게시물 섬네일을 클릭할 때마다 조회수![click](https://user-images.githubusercontent.com/78891624/131288623-b495d39b-476c-425f-bbfd-9f873f441f79.png)가 1씩 증가하도록 한다.
 
-<p align="center">
-<img src="https://user-images.githubusercontent.com/78891624/129853930-840d0903-6de1-49bf-acf0-18c60f95bd5f.gif" width="850" height="500"/>
-</p>
+|조회수|
+|:-:|
+|![조회수](https://user-images.githubusercontent.com/78891624/129853930-840d0903-6de1-49bf-acf0-18c60f95bd5f.gif?h=850&w=1260)|	
 
 ##### 1. BoardDAO.java
 ###### - 게시물의 글번호(num)을 매개변수로 하는 mapper 메소드를 생성한다.
@@ -607,6 +609,13 @@ public String loginview( HttpServletRequest req, HttpSession session,
 #### 6) detailView.jsp
 - 각 게시판에서 섬네일을 클릭하면 해당 상세페이지로 이동하게 된다.
 - 로그인한 USER 아아디, 게시판 카테고리명, 게시물 작성자, 작성일, 제목, 이미지, 내용이 나타난다.
+- 클릭한 게시물의 작성자가 로그인한 USER 아이디와 같다면, 게시물을 [수정] 및 [삭제] 할 수 있는 권한이 있다.
+- 비회원이거나 로그인한 USER가 해당 게시물 작성자와 다르다면 [수정], [삭제] 버튼이 나타나지 않는다.
+	
+|상세페이지|
+|:-:|
+|![상세페이지](https://user-images.githubusercontent.com/78891624/129854096-891ca57c-6abf-4ba2-91c6-a783918406e1.gif?h=850&w=1260)|	
+
 ```
 <div id="container">
    <div class="second_container">
@@ -645,40 +654,13 @@ public String loginview( HttpServletRequest req, HttpSession session,
                 <button type="button" class="btn btn-info" id="list" onclick="board()" >목록</button><br><br>
       
 ```
-- 클릭한 게시물의 작성자가 로그인한 USER 아이디와 같다면, 게시물을 [수정] 및 [삭제] 할 수 있는 권한이 있다.
-- 비회원이거나 로그인한 USER가 해당 게시물 작성자와 다르다면 [수정], [삭제] 버튼이 나타나지 않는다.
 
-<p align="center">
-<img src="https://user-images.githubusercontent.com/78891624/129854096-891ca57c-6abf-4ba2-91c6-a783918406e1.gif" width="850" height="500"/>
-</p>
-
-- [수정]을 누르면 Controller의 updateForm로 이동한다.
-- [삭제]를 누르면 Controller의 delete로 이동한다.
-```
-         <c:choose>
-            <c:when test="${writer == user_id || user_id == 'admin_user' && user_id != '비회원'}">
-             
-                 <form action="updateForm" method="get" enctype="multipart/form-data">
-                   <input type="hidden" name="title" value="${title}">
-                   <input type="hidden" name="image" value="${image}">
-                   <input type="hidden" name="contents" value="${contents}">
-                   <input type="hidden" name="lang" value="${lang}">
-                   <input type="hidden" name="num" value="${num}">
-                   <input type="hidden" name="writer" value="${writer}">
-                   <input type="hidden" name="date1" value="${date1}">
-      
-               <a href="delete?num=${num}"><input type="button" value="삭제" class="btn btn-info"  style="float: right"></a>
-                  <input type="submit" value="수정" class="btn btn-info" style="float: right;">
-                     </form>
-                  </c:when>
-               </c:choose>
-            </table><br>
-```
+	    
 - 회원이라면 글 작성자 아이디를 클릭하면 user_num(USER 번호)에 의해 해당 회원의 프로필 페이지를 볼 수 있다.
-		 
-<p align="center">
-<img src="https://user-images.githubusercontent.com/78891624/129853949-60f3323d-8e5b-4807-bc17-d1208b784ccc.gif" width="850" height="500"/>
-</p>
+
+|상세페이지에서 작성자의 프로필페이지로 이동|
+|:-:|
+|![상세페이지에서 작성자의 프로필페이지로 이동](https://user-images.githubusercontent.com/78891624/129853949-60f3323d-8e5b-4807-bc17-d1208b784ccc.gif?h=850&w=1260)|	
 		    
 #### 4.3.2.2  카테고리별 게시판 조회
 - java, html, javascript, spring 게시판에서 각 개발언어별 게시물이 조회되도록 한다. 
@@ -789,11 +771,10 @@ public String html(@RequestParam("lang")String lang,
 - 게시물 작성자가 로그인한 USER 아이디와 같다면 detailView.jsp에 [수정] 버튼이 나타난다.
 - [수정]을 누르면 다음과 같이 Controller의 updateForm로 이동하여 수정할 수 있는 페이지(updateView.jsp)로 이동하게 된다.
 
-<p align="center">
-<img src="https://user-images.githubusercontent.com/78891624/129853993-b6afcdb3-c41c-4bd8-a40c-27f1daadbb75.gif" width="850" height="500"/>
-</p>
-
-
+|게시물 수정|
+|:-:|
+|![게시물 수정](https://user-images.githubusercontent.com/78891624/129853993-b6afcdb3-c41c-4bd8-a40c-27f1daadbb75.gif?h=850&w=1260)|	
+		    
 #### 1) updateView.jsp
 - detailView.jsp의 값을 그대로 가지고 있지만, 수정할 수 있도록 <input> 태그 형태로 작성해준다.
 - 수정페이지에서는 게시판 카테고리명, 제목, 내용을 수정할 수 있다.
@@ -845,10 +826,6 @@ public String html(@RequestParam("lang")String lang,
   		<button type="button" class="btn btn-info" id="back" onclick="history.go(-1)">뒤로가기</button>
 		<button type="button" class="btn btn-info" id="list" onclick="board()">목록</button><br><br>
 	</table>
-
-<%@ include file="../views/layout/footer.jsp"%>
-</body>
-</html>
 
 ```
 
@@ -1004,6 +981,9 @@ public int deleteBoard(int num) {
 - [새 글 등록]을 누르면 게시판과 동일하게 글을 작성할 수 있다.
 - [내가 작성한 댓글보기]를 누르면 로그인한 USER가 작성했던 모든 댓글을 볼 수 있는 replyList.jsp 로 이동하게 된다.
 
+|프로필페이지|
+|:-:|
+|![프로필페이지](https://user-images.githubusercontent.com/78891624/129854012-e5859652-f83a-499c-82a3-b06ab8eb29ee.gif?h=850&w=1260)|	
 
 #### 1) profile.jsp
 - 내가 작성한 게시물 개수는 fn 태그라이브러리를 이용하여 menu 속성명으로 받아온 List 개수를 이용한다.
@@ -1029,17 +1009,12 @@ public int deleteBoard(int num) {
 - [새 글 등록] : 게시판에서 글을 작성한 방식과 동일하게 BoardController1의 write로 이동하여 글을 작성할 수 있다.
 - [내가 작성한 댓글 보기]: BoardController1의 myReplyList로 이동한다.
 
-<p align="center">
-<img src="https://user-images.githubusercontent.com/78891624/129854012-e5859652-f83a-499c-82a3-b06ab8eb29ee.gif" width="850" height="500"/>
-</p>
-
 ``` 
 <c:choose>
       <c:when test="${dto.pageOwnerState}">
             <button class="cta" onclick="location.href='write'">새 글 등록</button>
             <button class="cta" onclick="location.href='myReplyList?user_id=${principal.user.username}'">내가 작성한 댓글 보기</button>
-      </c:when>
-                    
+      </c:when>                    
 </c:choose>
 ```
 
@@ -1132,6 +1107,10 @@ public class UserController {
 - 비회원은 이용할 수 없다.	
 - 프로필 페이지에서 각 회원이 작성한 게시물을 볼 수 있다.
 
+|회원프로필 목록|
+|:-:|
+|![회원프로필 목록](https://user-images.githubusercontent.com/78891624/131285810-ac13e168-6347-477f-80f2-2ba088aa4fc6.gif?h=850&w=1260)|		
+
 #### 1) profileList.jsp
 - 블로그에 등록되었는 회원들을 리스트 형태로 확인할 수 있다.
 - 프로필 이미지를 클릭하면 해당 회원들 프로필 페이지로 이동한다.
@@ -1158,6 +1137,11 @@ public class UserController {
 #### 4.3.7 게시물 검색(추가로 작성함)***	
 - 메인페이지 오른쪽에 검색하고 싶은 타입(제목, 내용, 작성자)을 콤보박스로 선택한 후 검색하고자하는 단어를 입력한다.
 - 그러면 해당 단어를 포함하는 게시물만 검색되어 검색페이지에 나타난다.
+
+|게시물 검색|
+|:-:|
+|![게시물 검색](https://user-images.githubusercontent.com/78891624/131285825-57a0fde9-f737-4d54-9ffb-8ecf65a574c4.gif?h=850&w=1260)|		  	  
+
 	  
 #### 1) search.jsp
 - 게시판 화면과 같이 동일한 grid 형태로 검색된 게시물이 조회된다.
@@ -1279,6 +1263,11 @@ private String getSearchList(@RequestParam("type")String type,
 ```
 #### 4.3.8 인기글 조회(추가로 작성함)***	
 - 메인페이지에서 [개발언어] 밑에 [인기글]을 클릭하면, 조회수가 20이 넘는 게시물만 조회된다.
+
+			
+|조회수 20이상인 게시물(인기글) 조회|조회수 20이상 만들기|
+|:-:|:-:|
+|![조회수 20이상인 게시물(인기글) 조회](https://user-images.githubusercontent.com/78891624/131285797-a071f3b7-b408-4d8a-9e23-4344a92b48a1.gif?h=750&w=1260)|![조회수 20이상 만들기](https://user-images.githubusercontent.com/78891624/131285781-c5baf97c-53b0-4559-aa7d-721002168b47.gif?h=750&w=1260)|			
 			
 #### 1) popularList.jsp
 - 게시판 화면과 같이 동일한 grid 형태로 검색된 게시물이 조회된다.
@@ -1383,11 +1372,11 @@ public class ReplyVO {
 ```
 
 #### 4.4.1 댓글 작성
-
-<p align="center">
-<img src="https://user-images.githubusercontent.com/78891624/129854054-d1856b2c-dfd9-4a15-93c7-0a0fdaf370e0.gif" width="850" height="500"/>
-</p>	
-
+	
+|댓글 작성|
+|:-:|
+|![댓글 작성](https://user-images.githubusercontent.com/78891624/129854054-d1856b2c-dfd9-4a15-93c7-0a0fdaf370e0.gif?h=850&w=1260)|		  	  
+	
 #### 1) detailView.jsp 하단의 댓글창
 - 회원으로 로그인한 경우, 댓글을 작성할 수 있는 댓글창이 나타난다.
 - 댓글을 작성한 후 [작성]을 누르면 Controller의 detailView로 이동한다.
@@ -1548,10 +1537,10 @@ public String loginview(HttpServletRequest req, HttpSession session,
 #### 4.4.3 댓글 수정
 - USER 아이디가 댓글의 작성자와 같으면, 댓글에 대한 [수정], [삭제] 버튼이 나타난다.
 - [수정]을 누르면, Controller의 updateReply로 이동한다.
-	 
-<p align="center">
-<img src="https://user-images.githubusercontent.com/78891624/129854073-4cffef34-d32a-4b77-8e69-2dd485d85011.gif" width="850" height="500"/>
-</p>
+
+|댓글 수정|
+|:-:|
+|![댓글 수정](https://user-images.githubusercontent.com/78891624/129854073-4cffef34-d32a-4b77-8e69-2dd485d85011.gif?h=850&w=1260)|		  	
 
 ##### 1) BoardDAO.java
 - 댓글번호, 댓글 내용을 매개변수로 하는 mapper 메소드를 생성한다.
@@ -1625,6 +1614,7 @@ public int deleteAllReply(int num)throws Exception{
 ```
 ##### 3)mybatismapper.xml
 - reply_num(댓글번호)을 조건으로 댓글이 삭제될 수 있도록 한다.
+	 
 ###### - 개별 삭제
 ```
  <delete id="deleteReply" parameterType="com.cos.prologstart.vo.ReplyVO">
@@ -1676,17 +1666,16 @@ public String delete(@RequestParam("num")int num) throws Exception {
 - 관리자 메인페이지에 [회원게시판], [회원강제 탈퇴], [공지사항] 3개의 버튼이 나타난다.
 - [회원게시판] 버튼을 누르면, 앞서 설명한 게시판 화면으로 이동한다.
 
-<p align="center">
-<img src="https://user-images.githubusercontent.com/78891624/129847905-f112199a-f99d-4f68-8348-ed2f71464e4d.gif" width="850" height="500"/>
-</p>
+|관리자 기능|
+|:-:|
+|![관리자 기능](https://user-images.githubusercontent.com/78891624/129847905-f112199a-f99d-4f68-8348-ed2f71464e4d.gif?h=850&w=1260)|		  
 
 #### 4.5.1 전체 회원 정보 조회
 - [회원강제탈퇴]를 누르면, 회원 전체 정보 조회와 해당 USER 아이디를 누르면 <a> 링크로 해당 USER가 작성한 글을 프로필 페이지 형태로 조회할 수 있다.
 
-<p align="center">
-<img src="https://user-images.githubusercontent.com/78891624/129847852-b87ebd90-b477-48a3-b52c-1d9651954cba.gif" width="850" height="500"/>
-</p>
-
+|관리자 기능- 전체 회원 정보 조회|
+|:-:|
+|![관리자 기능- 전체 회원 정보 조회](https://user-images.githubusercontent.com/78891624/129847852-b87ebd90-b477-48a3-b52c-1d9651954cba.gif?h=850&w=1260)|		  
 
 ##### 1)BoardDAO.java
 - 회원 정보를 전체 조회할 수 있는 mapper 메서드를 생성한다.
@@ -1773,9 +1762,10 @@ public String userList(Model model1) {
 - 관리자는 notice 카테고리를 선택하여 공지사항 글을 작성할 수 있다.
 - 일반 회원은 공지사항을 작성할 수 없다.
 
-<p align="center">
-<img src="https://user-images.githubusercontent.com/78891624/129847973-fe75bded-206c-4bf3-bf3e-5ff0ce5a8f3c.gif" width="850" height="500"/>
-</p>
+|관리자 기능- 공지사항 작성|
+|:-:|
+|![관리자 기능- 공지사항 작성](https://user-images.githubusercontent.com/78891624/129847973-fe75bded-206c-4bf3-bf3e-5ff0ce5a8f3c.gif?h=850&w=1260)|		  
+
 
 ##### 1) notice.jsp
 - admin_user라는 USER 아이디로 로그인하면 공지사항 게시판으로 이동했을 때 <img src="https://user-images.githubusercontent.com/78891624/130184068-8751dc3e-5d3b-4466-b01a-99f77cea28cc.PNG" width="30" height="30"/>이 생성된다.
@@ -1786,7 +1776,7 @@ public String userList(Model model1) {
 <%@ include file="../layout/header2.jsp"%>
 <h1>공지사항(notice)</h1>
 <hr>
-  <c:choose>
+<c:choose>
  	<c:when test="${principal.user.username == 'admin_user'}"> <!-- 관리자가 로그인했을 경우, 공지사항 글작성 권한을 주기위해 -->
  	   <div align="right"><a href="adminWrite?user_id=${principal.user.username}"><button type="button" class="btn btn-info" id="writeBtn">
 		<img src="../images/pencil.png" width="30"></button></a></div>
@@ -1797,12 +1787,16 @@ public String userList(Model model1) {
 ```	
 #### 4.5.4  모든 게시물, 댓글 접근 권한(수정, 삭제 권한)
 
-<p align="center">
-<img src="https://user-images.githubusercontent.com/78891624/129847958-bedb06f5-1e1d-4f18-bb37-b5fe33dcaa21.gif" width="850" height="500"/>
-</p>
-
 - 해당 게시물을 작성한 USER가 아니더라도 관리자(admin_user)로 로그인하면 게시물과 댓글을 수정, 삭제할 수 있는 권한이 주어진다.
 - 다음은 관리자의 게시물 접근 권한을 설정한 코드이다.
+	
+|작성자가 관리자가 아니어도 접근가능|
+|:-:|
+|![작성자가 관리자가 아니어도 접근가능](https://user-images.githubusercontent.com/78891624/129847958-bedb06f5-1e1d-4f18-bb37-b5fe33dcaa21.gif?h=750&w=1260)|
+	
+|모든 게시물, 댓글 접근 권한|
+|:-:|
+|![모든 게시물, 댓글 접근 권한](https://user-images.githubusercontent.com/78891624/129847936-f2ca1075-0552-46b4-962a-55a37064b90a.gif?h=750&w=1260)|	
 	
 ##### 1)detailView.jsp
  ```     
@@ -1825,11 +1819,7 @@ public String userList(Model model1) {
 </c:choose>
 ```
 	 
-<p align="center">
-<img src="https://user-images.githubusercontent.com/78891624/129847936-f2ca1075-0552-46b4-962a-55a37064b90a.gif" width="850" height="500"/>
-</p>
-	 
-- 다음은 관리자의 댓글 접근 권한을 설정한 코드이다.
+- 아래의 코드는 관리자의 댓글 접근 권한을 설정한 코드이다.
 	 
 ```
   <div id="reply">
