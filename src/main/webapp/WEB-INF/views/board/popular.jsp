@@ -15,7 +15,7 @@
 </head>
 <body>
  	<%@ include file="../layout/header2.jsp"%>
- 	<h1>검색 게시판</h1>
+ 	<h1><img src="../images/crown.png" width="50" height="50">인기글<img src="../images/crown.png" width="50" height="50"></h1>
 		<hr>
  			<c:choose>
  				<c:when test="${principal.user.username != null}">
@@ -50,10 +50,7 @@
 			 </div>
 			 		<button type="button" class="btn btn-info" id="btnUpdate" onclick="history.go(-1)">뒤로가기</button>	
 			 </table>
-					
-			</div>
-			</div>
-			</div>
+			
 	<%@ include file="../layout/footer.jsp"%>
 </body>
 </html>

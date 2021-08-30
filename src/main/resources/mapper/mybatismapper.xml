@@ -24,6 +24,8 @@
 	   				
 				)
     </insert>
+    
+    
 	<select id="getAllBoard" resultType="com.cos.prologstart.vo.BoardVO">
 		SELECT
 			user_id,user_num, num, lang, title, contents, image, DATE_FORMAT(date1, '%Y-%m-%d %T') as 'date1',hit, reply_cnt
@@ -54,6 +56,7 @@
 			num = #{num}
 	</select>
 	
+	
 	<update id="updateclear" parameterType="com.cos.prologstart.vo.BoardVO">
 		UPDATE
 			 boardTable2
@@ -72,11 +75,13 @@
 	
 	<delete id="deleteBoard" parameterType="com.cos.prologstart.vo.BoardVO">
 		DELETE 
+		
 		FROM 
 			boardTable2
         WHERE 
         	num = #{num}
 	</delete>
+	
 	
 	<select id="goMypage" resultType="com.cos.prologstart.vo.BoardVO">
 		SELECT
@@ -86,6 +91,7 @@
 		WHERE
 			user_id = #{user_id}
 	</select>
+	
 	
 	<update id="hitCount" parameterType="com.cos.prologstart.vo.BoardVO">
 		UPDATE 
@@ -98,6 +104,7 @@
     
 	</update>
 	
+	
  	<update id="ReplyCount" parameterType="int">
 		UPDATE 
 			boardTable2
@@ -107,6 +114,7 @@
 			num = #{num}	
 
 	</update> 
+	
 	
 	<select id="readReply" resultType="com.cos.prologstart.vo.ReplyVO">
 		SELECT
@@ -121,33 +129,46 @@
 		
 	</select>
 	
+	
 	<insert id="writeReply">
 		INSERT INTO
-			replyTable(num,content,writer)   
-		VALUES(
+			replyTable
+			(
+					num,
+					content,
+					writer
+				
+			)   
+		VALUES
+			(
 	   				#{num},
 	   				#{content},
 	   				#{writer}
-				)
+			)
 	</insert>
+	
 	
 	<delete id="deleteReply" parameterType="com.cos.prologstart.vo.ReplyVO">
 		DELETE 
+		
 		FROM 
 			replyTable
         WHERE 
         	reply_num = #{reply_num}
 	</delete>
 	
+	
 	<delete id="deleteAllReply" parameterType="com.cos.prologstart.vo.ReplyVO">
 		DELETE 
+		
 		FROM 
 			replyTable
         WHERE 
         	num = #{num}
 	</delete>
 	
-	 <update id="updateReply" parameterType="com.cos.prologstart.vo.ReplyVO">
+	
+	<update id="updateReply" parameterType="com.cos.prologstart.vo.ReplyVO">
 		UPDATE 
 			replyTable
         SET 
@@ -158,8 +179,10 @@
         	reply_num = #{reply_num}
 	</update>
 	
+	
 	<select id="myReplyList" resultType="com.cos.prologstart.vo.ReplyVO">
-		SELECT *
+		SELECT 
+				*
 		FROM 
 			replyTable
         WHERE 
@@ -173,6 +196,7 @@
 			user   
 	</select>
 	
+	
 	<delete id="deleteMember" parameterType="com.cos.prologstart.domain.user.User">
 		DELETE 
 		FROM 
@@ -180,6 +204,7 @@
         WHERE 
         	username = #{username}
 	</delete>
+	
 	
 	<select id="getSearchList" resultType="com.cos.prologstart.vo.BoardVO">
 		SELECT 
@@ -199,6 +224,7 @@
 			</when>
 		</choose> 
 	</select>
+	
 	
 	<select id="getPopularList" resultType="com.cos.prologstart.vo.BoardVO">
 		SELECT

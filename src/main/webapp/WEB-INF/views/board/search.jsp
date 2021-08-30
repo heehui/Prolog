@@ -15,7 +15,8 @@
 </head>
 <body>
  	<%@ include file="../layout/header2.jsp"%>
- 	<h1>검색한 게시물</h1>
+ 	<h1>검색한 게시물<img src="../images/search.png" width="50" height="50"></h1>
+ 		<h2>[${type}] "${keyword}"으로 검색한 결과...</h2>
 		<hr>
 		<table align="center">
 			<tbody style="width: 50%">
@@ -39,11 +40,8 @@
 			 </tbody>
 			 </div>
 			 		<button type="button" class="btn btn-info" id="btnUpdate" onclick="history.go(-1)">뒤로가기</button>	
-			 </table>
-					
-			</div>
-			</div>
-			</div>
+			</table>
+
 	<%@ include file="../layout/footer.jsp"%>
 </body>
 </html>

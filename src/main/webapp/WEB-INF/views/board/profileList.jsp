@@ -11,7 +11,7 @@
 </head>
 <body>
  	<%@ include file="../layout/header2.jsp"%><br>
- 	<h1>회원 프로필 리스트</h1>
+ 	<h1>회원 프로필 목록<img src="../images/user.png" width="50" height="50"></h1>
 		<hr>	
 		<table align="center">
 			<tbody style="width: 50%">

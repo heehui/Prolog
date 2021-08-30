@@ -55,7 +55,15 @@
 					<li class="navi-item"><a href="/index">
 							<i class="fas fa-home"></i>
 						</a></li>
-					<li class="navi-item"><a href="/board/profileList">
+					<li class="navi-item">
+					<c:choose>
+						<c:when test="${principal.user.id == null}">
+							<a href="/board">
+						</c:when>
+						<c:otherwise>
+							<a href="/board/profileList">
+						</c:otherwise>
+					</c:choose>
 							<i class="fa fa-bars"></i>
 						</a></li>																		<!-- title : 마우스 올리면 로그인한 회원아이디가 뜨도록 -->
 					<li class="navi-item"><a href="/${principal.user.id}?user_id=${principal.user.username}" title="${principal.user.username}(${principal.user.name})님 로그인중">
